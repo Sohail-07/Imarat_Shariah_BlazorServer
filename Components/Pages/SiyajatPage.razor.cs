@@ -9,20 +9,29 @@ namespace Imarat_Shariah.Components.Pages
         [Inject]
         ISiyajatService _siyajatService {  get; set; }
 
-        private List<Siyajat> SiyajatEntries = new List<Siyajat>();
-        private Siyajat selectedSiyajat = new Siyajat();
-
+        private List<Siyajat> SiyajatEntries = new();
+        private Siyajat selectedSiyajat = new();
         private bool isEditMode = false;
+        private bool isModalVisible = false;
+
 
         protected override async Task OnInitializedAsync()
         {
             SiyajatEntries = (await _siyajatService.GetAllAsync()).ToList();
         }
 
+        private void OpenAddModal()
+        {
+            selectedSiyajat = new Siyajat();  // Clear the model
+            isEditMode = false;
+            isModalVisible = true;  // Open modal
+        }
+
         private void HandleEdit(int id)
         {
             selectedSiyajat = SiyajatEntries.FirstOrDefault(s => s.Id == id);
             isEditMode = true;
+            isModalVisible = true;
         }
 
         private async Task HandleDelete(int id)
@@ -43,14 +52,12 @@ namespace Imarat_Shariah.Components.Pages
             }
 
             SiyajatEntries = (await _siyajatService.GetAllAsync()).ToList();
-            isEditMode = false;
-            selectedSiyajat = new Siyajat(); // Reset the form
+            isModalVisible = false;  // Close modal
         }
 
         private void HandleCancel()
         {
-            isEditMode = false;
-            selectedSiyajat = new Siyajat(); // Reset the form
+            isModalVisible = false;
         }
     }
 }

@@ -1,5 +1,14 @@
 ﻿@page "/siyajat"
 
-<SiyajatForm SiyajatModel="@selectedSiyajat" IsEditMode="@isEditMode" OnSubmit="HandleSubmit" OnCancel="HandleCancel" />
+<!-- Button to open Modal -->
+<button class="btn btn-success" @onclick="OpenAddModal">Add New Siyajat</button>
 
+<!-- Siyajat List -->
 <SiyajatList SiyajatEntries="@SiyajatEntries" OnEdit="HandleEdit" OnDelete="HandleDelete" />
+
+<!-- Siyajat Form Modal -->
+<SiyajatForm @bind-IsModalVisible="isModalVisible"
+              SiyajatModel="@selectedSiyajat"
+              IsEditMode="@isEditMode"
+              OnSubmit="HandleSubmit"
+              OnCancel="HandleCancel" />

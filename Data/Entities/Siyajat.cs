@@ -1,14 +1,30 @@
-﻿namespace Imarat_Shariah.Data.Entities
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Imarat_Shariah.Data.Entities
 {
     public class Siyajat : BaseEntity
     {
         public int Id { get; set; }
+
+        [Required]
         public int FormNo { get; set; }
+        
+        [Required]
         public int QazatNo { get; set; }
-        public string? FormType { get; set; }
+        
+        [Required]
+        public string FormType { get; set; }
+        
+        [Required]
         public DateTime NikahDate { get; set; } = DateTime.Now;
-        public string? GroomName { get; set; }
-        public string? BrideName { get; set; }
-        public string? QariName { get; set; }
+        
+        [Required]
+        public string GroomName { get; set; }
+        
+        [Required]
+        public string BrideName { get; set; }
+        
+        [Required]
+        public string QariName { get; set; }
     }
 }

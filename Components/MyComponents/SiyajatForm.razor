@@ -1,44 +1,89 @@
-﻿<h3>@(IsEditMode ? "Edit Siyajat Entry" : "Add Siyajat Entry")</h3>
+﻿<div class="modal fade @(IsModalVisible ? "show d-block" : "d-none")" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalLabel">@GetTitle()</h5>
+                <button type="button" class="btn-close" @onclick="CloseModal" aria-label="Close"></button>
+            </div>
 
-<EditForm Model="@SiyajatModel" OnValidSubmit="HandleValidSubmit">
-    <DataAnnotationsValidator />
-    <ValidationSummary />
+            <div class="modal-body">
+                <EditForm Model="@SiyajatModel" OnValidSubmit="HandleValidSubmit">
+                    <DataAnnotationsValidator />
+                    @* <ValidationSummary class="text-danger" /> *@
 
-    <div class="form-group">
-        <label for="FormNo">Form Number</label>
-        <InputNumber id="FormNo" class="form-control" @bind-Value="SiyajatModel.FormNo" />
+                    <div class="row">
+                        <!-- First Column: Form Data -->
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="formNo" class="form-label">Form No</label>
+                                <InputNumber id="formNo" class="form-control" @bind-Value="SiyajatModel.FormNo" />
+                                <ValidationMessage For="@(() => SiyajatModel.FormNo)" class="text-danger" />
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="qazatNo" class="form-label">Qazat No</label>
+                                <InputNumber id="qazatNo" class="form-control" @bind-Value="SiyajatModel.QazatNo" />
+                                <ValidationMessage For="@(() => SiyajatModel.QazatNo)" class="text-danger" />
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="formType" class="form-label">Form Type</label>
+                                <InputText id="formType" class="form-control" @bind-Value="SiyajatModel.FormType" />
+                                <ValidationMessage For="@(() => SiyajatModel.FormType)" class="text-danger" />
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="nikahDate" class="form-label">Nikah Date</label>
+                                <InputDate id="nikahDate" class="form-control" @bind-Value="SiyajatModel.NikahDate" />
+                                <ValidationMessage For="@(() => SiyajatModel.NikahDate)" class="text-danger" />
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="groomName" class="form-label">Groom Name</label>
+                                <InputText id="groomName" class="form-control" @bind-Value="SiyajatModel.GroomName" />
+                                <ValidationMessage For="@(() => SiyajatModel.GroomName)" class="text-danger" />
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="brideName" class="form-label">Bride Name</label>
+                                <InputText id="brideName" class="form-control" @bind-Value="SiyajatModel.BrideName" />
+                                <ValidationMessage For="@(() => SiyajatModel.BrideName)" class="text-danger" />
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="qariName" class="form-label">Qari Name</label>
+                                <InputText id="qariName" class="form-control" @bind-Value="SiyajatModel.QariName" />
+                                <ValidationMessage For="@(() => SiyajatModel.QariName)" class="text-danger" />
+                            </div>
+
+                            <div class="mb-3 form-check">
+                                <InputCheckbox id="isActive" class="form-check-input" @bind-Value="SiyajatModel.IsActive" />
+                                <label class="form-check-label" for="isActive">Is Active</label>
+                            </div>
+                        </div>
+
+                        <!-- Second Column: PDF Upload Area -->
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label">Upload PDF:</label>
+                                <input type="file" @onchange="HandleFileSelected" class="form-control" accept="application/pdf" />
+                            </div>
+                            <div class="drag-drop-area" @ondrop="HandleDrop" @ondragover="HandleDragOver" style="border: 2px dashed #007bff; padding: 20px; text-align: center;">
+                                <p>Drag and drop PDF here, or click to browse.</p>
+                                @if (PdfFileName != null)
+                                {
+                                    <p><strong>Selected File:</strong> @PdfFileName</p>
+                                }
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                        <button type="button" class="btn btn-secondary" @onclick="CloseModal">Cancel</button>
+                    </div>
+                </EditForm>
+            </div>
+        </div>
     </div>
-
-    <div class="form-group">
-        <label for="QazatNo">Qazat Number</label>
-        <InputNumber id="QazatNo" class="form-control" @bind-Value="SiyajatModel.QazatNo" />
-    </div>
-
-    <div class="form-group">
-        <label for="FormType">Form Type</label>
-        <InputText id="FormType" class="form-control" @bind-Value="SiyajatModel.FormType" />
-    </div>
-
-    <div class="form-group">
-        <label for="NikahDate">Nikah Date</label>
-        <InputDate id="NikahDate" class="form-control" @bind-Value="SiyajatModel.NikahDate" />
-    </div>
-
-    <div class="form-group">
-        <label for="GroomName">Groom Name</label>
-        <InputText id="GroomName" class="form-control" @bind-Value="SiyajatModel.GroomName" />
-    </div>
-
-    <div class="form-group">
-        <label for="BrideName">Bride Name</label>
-        <InputText id="BrideName" class="form-control" @bind-Value="SiyajatModel.BrideName" />
-    </div>
-
-    <div class="form-group">
-        <label for="QariName">Qari Name</label>
-        <InputText id="QariName" class="form-control" @bind-Value="SiyajatModel.QariName" />
-    </div>
-
-    <button type="submit" class="btn btn-primary">Submit</button>
-    <button type="button" class="btn btn-secondary" @onclick="Cancel">Cancel</button>
-</EditForm>
+</div>
