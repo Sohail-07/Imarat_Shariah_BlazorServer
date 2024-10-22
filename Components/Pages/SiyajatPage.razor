@@ -1,14 +1,17 @@
 ﻿@page "/siyajat"
 
 <!-- Button to open Modal -->
-<button class="btn btn-success" @onclick="OpenAddModal">Add New Siyajat</button>
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h1>Siyajat List</h1>
+    <button class="btn btn-success" @onclick="OpenAddModal">Add New Siyajat</button>
+</div>
 
 <!-- Siyajat List -->
 <SiyajatList SiyajatEntries="@SiyajatEntries" OnEdit="HandleEdit" OnDelete="HandleDelete" />
 
 <!-- Siyajat Form Modal -->
 <SiyajatForm @bind-IsModalVisible="isModalVisible"
-              SiyajatModel="@selectedSiyajat"
-              IsEditMode="@isEditMode"
-              OnSubmit="HandleSubmit"
-              OnCancel="HandleCancel" />
+             SiyajatModel="@selectedSiyajat"
+             IsEditMode="@isEditMode"
+             OnSubmit="HandleSubmit"
+             OnCancel="HandleCancel" />
