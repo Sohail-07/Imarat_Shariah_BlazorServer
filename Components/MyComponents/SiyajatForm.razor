@@ -1,0 +1,44 @@
+﻿<h3>@(IsEditMode ? "Edit Siyajat Entry" : "Add Siyajat Entry")</h3>
+
+<EditForm Model="@SiyajatModel" OnValidSubmit="HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="form-group">
+        <label for="FormNo">Form Number</label>
+        <InputNumber id="FormNo" class="form-control" @bind-Value="SiyajatModel.FormNo" />
+    </div>
+
+    <div class="form-group">
+        <label for="QazatNo">Qazat Number</label>
+        <InputNumber id="QazatNo" class="form-control" @bind-Value="SiyajatModel.QazatNo" />
+    </div>
+
+    <div class="form-group">
+        <label for="FormType">Form Type</label>
+        <InputText id="FormType" class="form-control" @bind-Value="SiyajatModel.FormType" />
+    </div>
+
+    <div class="form-group">
+        <label for="NikahDate">Nikah Date</label>
+        <InputDate id="NikahDate" class="form-control" @bind-Value="SiyajatModel.NikahDate" />
+    </div>
+
+    <div class="form-group">
+        <label for="GroomName">Groom Name</label>
+        <InputText id="GroomName" class="form-control" @bind-Value="SiyajatModel.GroomName" />
+    </div>
+
+    <div class="form-group">
+        <label for="BrideName">Bride Name</label>
+        <InputText id="BrideName" class="form-control" @bind-Value="SiyajatModel.BrideName" />
+    </div>
+
+    <div class="form-group">
+        <label for="QariName">Qari Name</label>
+        <InputText id="QariName" class="form-control" @bind-Value="SiyajatModel.QariName" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Submit</button>
+    <button type="button" class="btn btn-secondary" @onclick="Cancel">Cancel</button>
+</EditForm>

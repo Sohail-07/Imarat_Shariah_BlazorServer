@@ -1,0 +1,5 @@
+﻿@page "/siyajat"
+
+<SiyajatForm SiyajatModel="@selectedSiyajat" IsEditMode="@isEditMode" OnSubmit="HandleSubmit" OnCancel="HandleCancel" />
+
+<SiyajatList SiyajatEntries="@SiyajatEntries" OnEdit="HandleEdit" OnDelete="HandleDelete" />

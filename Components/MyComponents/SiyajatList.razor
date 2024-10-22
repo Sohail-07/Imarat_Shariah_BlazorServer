@@ -1,0 +1,43 @@
+﻿<h3>Siyajat List</h3>
+
+@if (SiyajatEntries == null)
+{
+    <p>Loading...</p>
+}
+else if (!SiyajatEntries.Any())
+{
+    <p>No Siyajat entries found.</p>
+}
+else
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Form No</th>
+                <th>Qazat No</th>
+                <th>Nikah Date</th>
+                <th>Form Type</th>
+                <th>Groom Name</th>
+                <th>Bride Name</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var siyajat in SiyajatEntries)
+            {
+                <tr>
+                    <td>@siyajat.FormNo</td>
+                    <td>@siyajat.QazatNo</td>
+                    <td>@_timeConversion.GetIndianStandardTime(siyajat.NikahDate)</td>
+                    <td>@siyajat.FormType</td>
+                    <td>@siyajat.GroomName</td>
+                    <td>@siyajat.BrideName</td>
+                    <td>
+                        <button class="btn btn-primary" @onclick="() => OnEdit.InvokeAsync(siyajat.Id)">Edit</button>
+                        <button class="btn btn-danger" @onclick="() => OnDelete.InvokeAsync(siyajat.Id)">Delete</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
