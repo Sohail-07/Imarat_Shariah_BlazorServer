@@ -1,4 +1,5 @@
-﻿using Imarat_Shariah.Data.Entities;
+﻿using Imarat_Shariah.Components.ViewModels;
+using Imarat_Shariah.Data.Entities;
 using Imarat_Shariah.Services.Interfaces;
 using Microsoft.AspNetCore.Components;
 
@@ -7,7 +8,9 @@ namespace Imarat_Shariah.Components.Pages
     public partial class SiyajatPage
     {
         [Inject]
-        ISiyajatService _siyajatService {  get; set; }
+        ISiyajatService _siyajatService { get; set; }
+
+        public DialogBoxModel DialogBoxModel { get; set; } = new();
 
         private List<Siyajat> SiyajatEntries = new();
         private Siyajat selectedSiyajat = new();
@@ -34,10 +37,21 @@ namespace Imarat_Shariah.Components.Pages
             isModalVisible = true;
         }
 
-        private async Task HandleDelete(int id)
+        private void OpenDeleteConfirmation(Siyajat model)
+        {
+            // Set up the dialog box model for confirmation
+            DialogBoxModel.IsVisible = true;
+            DialogBoxModel.Title = "Confirm Siyajat Deletion";
+            DialogBoxModel.Message = new MarkupString($"Are you sure you want to delete Siyajat<br /> <strong>Form Number {model.FormNo}, Qazat Number {model.QazatNo} record?</strong>");
+            DialogBoxModel.OnConfirm = EventCallback.Factory.Create<bool>(this, (confirm) => ConfirmDelete(model.Id));
+            DialogBoxModel.OnCancel = EventCallback.Factory.Create<bool>(this, (cancel) => DialogBoxModel.IsVisible = false);
+        }
+
+        private async Task ConfirmDelete(int id)
         {
             await _siyajatService.DeleteAsync(id);
             SiyajatEntries = (await _siyajatService.GetAllAsync()).ToList();
+            DialogBoxModel.IsVisible = false; // Close dialog
         }
 
         private async Task HandleSubmit(Siyajat siyajat)

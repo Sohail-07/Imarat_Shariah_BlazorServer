@@ -1,0 +1,22 @@
+﻿@using Imarat_Shariah.Components.ViewModels
+@code {
+    [Parameter] public DialogBoxModel DialogBoxModel { get; set; } = new();
+}
+
+<div class="modal fade @(DialogBoxModel.IsVisible ? "show d-block" : "d-none")" tabindex="-1" role="dialog" style="display: @(DialogBoxModel.IsVisible ? "block" : "none")">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">@DialogBoxModel.Title</h5>
+                <button type="button" class="btn-close" @onclick="() => DialogBoxModel.OnCancel.InvokeAsync(false)" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>@DialogBoxModel.Message</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" @onclick="() => DialogBoxModel.OnCancel.InvokeAsync(false)">Cancel</button>
+                <button type="button" class="btn btn-danger" @onclick="() => DialogBoxModel.OnConfirm.InvokeAsync(true)">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>

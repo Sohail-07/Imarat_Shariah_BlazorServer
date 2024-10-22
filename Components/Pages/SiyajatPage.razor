@@ -1,4 +1,5 @@
 ﻿@page "/siyajat"
+@using Imarat_Shariah.Components.CoomonComponents
 
 <!-- Button to open Modal -->
 <div class="d-flex justify-content-between align-items-center mb-3">
@@ -7,7 +8,7 @@
 </div>
 
 <!-- Siyajat List -->
-<SiyajatList SiyajatEntries="@SiyajatEntries" OnEdit="HandleEdit" OnDelete="HandleDelete" />
+<SiyajatList SiyajatEntries="@SiyajatEntries" OnEdit="HandleEdit" OnDelete="OpenDeleteConfirmation" />
 
 <!-- Siyajat Form Modal -->
 <SiyajatForm @bind-IsModalVisible="isModalVisible"
@@ -15,3 +16,6 @@
              IsEditMode="@isEditMode"
              OnSubmit="HandleSubmit"
              OnCancel="HandleCancel" />
+
+<!-- Delete Confirmation Dialog -->
+<DialogComponent DialogBoxModel="DialogBoxModel" />

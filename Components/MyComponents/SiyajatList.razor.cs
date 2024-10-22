@@ -16,6 +16,6 @@ namespace Imarat_Shariah.Components.MyComponents
         public EventCallback<int> OnEdit { get; set; }
 
         [Parameter]
-        public EventCallback<int> OnDelete { get; set; }
+        public EventCallback<Siyajat> OnDelete { get; set; }
     }
 }
