@@ -1,60 +1,61 @@
-﻿<div class="container p-3 mb-3 border rounded bg-light">
-    <div class="row g-3 mb-3">
-        <!-- Form No -->
-        <div class="col-md-3">
-            <label for="formNo" class="form-label fw-bold">Form No</label>
-            <input type="text" class="form-control" id="formNo" placeholder="Enter Form No" @bind="SearchFormNo" />
-        </div>
-
-        <!-- Qazat No -->
-        <div class="col-md-3">
-            <label for="qazatNo" class="form-label fw-bold">Qazat No</label>
-            <input type="text" class="form-control" id="qazatNo" placeholder="Enter Qazat No" @bind="SearchQazatNo" />
-        </div>
-
-        <!-- Form Type Filter -->
-        <div class="col-md-3">
-            <label for="formType" class="form-label fw-bold">Filter by Form Type</label>
-            <select class="form-select" id="formType" @bind="FilterFormType">
-                <option value="">-- All Form Types --</option>
-                <option value="Type1">Type 1</option>
-                <option value="Type2">Type 2</option>
-                <option value="Type3">Type 3</option>
-            </select>
-        </div>
+﻿<div class="card shadow-sm border-light mb-4">
+    <div class="card-header bg-success text-white">
+        <h4 class="mb-0 text-center">Search Siyajat Forms</h4>
     </div>
+    <div class="card-body">
+        <div class="row g-3">
+            <!-- Form No -->
+            <div class="col-md-4">
+                <label for="formNo" class="form-label fw-bold">Form No</label>
+                <input type="text" class="form-control" id="formNo" placeholder="Enter Form No" @bind="SearchFormNo" />
+            </div>
 
-    <div class="row g-3 mb-3">
-        <!-- Groom Name -->
-        <div class="col-md-3">
-            <label for="groomName" class="form-label fw-bold">Groom Name</label>
-            <input type="text" class="form-control" id="groomName" placeholder="Enter Groom Name" @bind="SearchGroomName" />
+            <!-- Qazat No -->
+            <div class="col-md-4">
+                <label for="qazatNo" class="form-label fw-bold">Qazat No</label>
+                <input type="text" class="form-control" id="qazatNo" placeholder="Enter Qazat No" @bind="SearchQazatNo" />
+            </div>
+
+            <!-- Form Type Filter -->
+            <div class="col-md-4">
+                <label for="formType" class="form-label fw-bold">Filter by Form Type</label>
+                <select class="form-select" id="formType" @bind="FilterFormType">
+                    <option value="">-- All Form Types --</option>
+                    <option value="Type1">Type 1</option>
+                    <option value="Type2">Type 2</option>
+                </select>
+            </div>
         </div>
 
-        <!-- Bride Name -->
-        <div class="col-md-3">
-            <label for="brideName" class="form-label fw-bold">Bride Name</label>
-            <input type="text" class="form-control" id="brideName" placeholder="Enter Bride Name" @bind="SearchBrideName" />
+        <div class="row g-3 mt-3">
+            <!-- Groom Name -->
+            <div class="col-md-4">
+                <label for="groomName" class="form-label fw-bold">Groom Name</label>
+                <input type="text" class="form-control" id="groomName" placeholder="Enter Groom Name" @bind="SearchGroomName" />
+            </div>
+
+            <!-- Bride Name -->
+            <div class="col-md-4">
+                <label for="brideName" class="form-label fw-bold">Bride Name</label>
+                <input type="text" class="form-control" id="brideName" placeholder="Enter Bride Name" @bind="SearchBrideName" />
+            </div>
+
+            <!-- Sort by -->
+            <div class="col-md-4">
+                <label for="sortBy" class="form-label fw-bold">Sort by</label>
+                <select class="form-select" id="sortBy" @bind="SortBy">
+                    <option value="">-- Sort by --</option>
+                    <option value="FormNo">Form No</option>
+                    <option value="QazatNo">Qazat No</option>
+                    <option value="NikahDate">Nikah Date</option>
+                    <option value="FormType">Form Type</option>
+                </select>
+            </div>
         </div>
 
-        <!-- Sort by -->
-        <div class="col-md-3">
-            <label for="sortBy" class="form-label fw-bold">Sort by</label>
-            <select class="form-select" id="sortBy" @bind="SortBy">
-                <option value="">-- Sort by --</option>
-                <option value="FormNo">Form No</option>
-                <option value="QazatNo">Qazat No</option>
-                <option value="NikahDate">Nikah Date</option>
-                <option value="FormType">Form Type</option>
-            </select>
-        </div>
-    </div>
-
-    <!-- Search Button -->
-    <div class="row mb-3">
-        <div class="col-md-3">
-            <button class="btn btn-primary w-100" @onclick="Search">Search</button>
-            <button class="btn btn-primary w-100" @onclick="Reset">Reset</button>
+        <div class="d-flex justify-content-center mt-4">
+            <button class="btn btn-primary px-4 me-3" @onclick="Search">Search</button>
+            <button class="btn btn-secondary px-4" @onclick="Reset">Reset</button>
         </div>
     </div>
 </div>

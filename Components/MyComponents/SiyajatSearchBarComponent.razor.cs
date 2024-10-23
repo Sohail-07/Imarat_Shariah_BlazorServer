@@ -30,7 +30,7 @@ namespace Imarat_Shariah.Components.MyComponents
             await OnSearch.InvokeAsync(searchParams);
         }
 
-        void Reset()
+        private async Task Reset()
         {
             SearchFormNo = null;
             SearchQazatNo = null;
@@ -38,6 +38,8 @@ namespace Imarat_Shariah.Components.MyComponents
             SearchBrideName = null;
             FilterFormType = null;
             SortBy = null;
+            
+            await OnSearch.InvokeAsync(new SiyajatSearchParamsModel());
         }
     }
 }

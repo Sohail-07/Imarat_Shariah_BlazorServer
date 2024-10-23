@@ -4,13 +4,15 @@
 }
 else if (!SiyajatEntries.Any())
 {
-    <p class="text-center">No Siyajat entries found.</p>
+    <div class="alert alert-dark" role="alert">
+        No Siyajat entries found.
+    </div>
 }
 else
 {
     <div class="table-responsive">
-        <table class="table table-hover table-bordered">
-            <thead class="table-light">
+        <table class="table table-hover table-bordered align-middle">
+            <thead class="table-success">
                 <tr>
                     <th scope="col">Form No</th>
                     <th scope="col">Qazat No</th>
@@ -32,7 +34,7 @@ else
                         <td>@siyajat.GroomName</td>
                         <td>@siyajat.BrideName</td>
                         <td class="text-center">
-                            <button class="btn btn-primary btn-sm" title="Edit" @onclick="() => OnEdit.InvokeAsync(siyajat.Id)">
+                            <button class="btn btn-primary btn-sm me-2" title="Edit" @onclick="() => OnEdit.InvokeAsync(siyajat.Id)">
                                 Edit
                             </button>
                             <button class="btn btn-danger btn-sm" title="Delete" @onclick="() => OnDelete.InvokeAsync(siyajat)">
