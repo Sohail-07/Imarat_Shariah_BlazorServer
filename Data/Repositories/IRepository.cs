@@ -1,4 +1,6 @@
-﻿namespace Imarat_Shariah.Data.Repositories
+﻿using Imarat_Shariah.Data.Entities;
+
+namespace Imarat_Shariah.Data.Repositories
 {
     public interface IRepository<TEntity> where TEntity : class
     {

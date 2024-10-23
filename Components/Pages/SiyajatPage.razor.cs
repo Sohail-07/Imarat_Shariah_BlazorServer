@@ -10,7 +10,11 @@ namespace Imarat_Shariah.Components.Pages
         [Inject]
         ISiyajatService _siyajatService { get; set; }
 
+        private List<Siyajat> filteredSiyajatEntries = new();
+
         public DialogBoxModel DialogBoxModel { get; set; } = new();
+
+        SiyajatSearchParamsModel SearchParams { get; set; }
 
         private List<Siyajat> SiyajatEntries = new();
         private Siyajat selectedSiyajat = new();
@@ -21,6 +25,7 @@ namespace Imarat_Shariah.Components.Pages
         protected override async Task OnInitializedAsync()
         {
             SiyajatEntries = (await _siyajatService.GetAllAsync()).ToList();
+            filteredSiyajatEntries = SiyajatEntries;
         }
 
         private void OpenAddModal()
@@ -36,7 +41,13 @@ namespace Imarat_Shariah.Components.Pages
             isEditMode = true;
             isModalVisible = true;
         }
-
+        private async Task HandleSearch(SiyajatSearchParamsModel searchParams)
+        {
+            SearchParams = searchParams;
+            // Filter and Sort the Siyajat entries based on searchParams
+            SiyajatEntries = (await _siyajatService.SearchSiyajatAsync(SearchParams)).ToList();
+        }
+        
         private void OpenDeleteConfirmation(Siyajat model)
         {
             // Set up the dialog box model for confirmation

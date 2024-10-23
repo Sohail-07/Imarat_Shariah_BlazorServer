@@ -1,4 +1,5 @@
-﻿using Imarat_Shariah.Data.Entities;
+﻿using Imarat_Shariah.Components.ViewModels;
+using Imarat_Shariah.Data.Entities;
 
 namespace Imarat_Shariah.Services.Interfaces
 {
@@ -9,5 +10,6 @@ namespace Imarat_Shariah.Services.Interfaces
         Task AddAsync(Siyajat siyajat);
         Task UpdateAsync(Siyajat siyajat);
         Task DeleteAsync(int id);
+        Task<IEnumerable<Siyajat>> SearchSiyajatAsync(SiyajatSearchParamsModel searchParams);
     }
 }

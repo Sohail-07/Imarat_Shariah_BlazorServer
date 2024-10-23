@@ -20,7 +20,7 @@ builder.Services.AddScoped<ITimeConversion, TimeConversion>();
 builder.Services.AddScoped<IKhulaService, KhulaService>();
 builder.Services.AddScoped<ISiyajatService, SiyajatService>();
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
-
+builder.Services.AddScoped<ISiyajatRepository, SiyajatRepository>();
 
 var app = builder.Build();
 

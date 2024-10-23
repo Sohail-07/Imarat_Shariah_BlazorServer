@@ -25,10 +25,13 @@
                                 <InputNumber id="qazatNo" class="form-control" @bind-Value="SiyajatModel.QazatNo" />
                                 <ValidationMessage For="@(() => SiyajatModel.QazatNo)" class="text-danger" />
                             </div>
-
                             <div class="mb-3">
                                 <label for="formType" class="form-label">Form Type</label>
-                                <InputText id="formType" class="form-control" @bind-Value="SiyajatModel.FormType" />
+                                <InputSelect id="formType" class="form-control" @bind-Value="SiyajatModel.FormType">
+                                    <option value="">-- Select Form Type --</option>
+                                    <option value="Type1">Type1</option>
+                                    <option value="Type2">Type2</option>
+                                </InputSelect>
                                 <ValidationMessage For="@(() => SiyajatModel.FormType)" class="text-danger" />
                             </div>
 
