@@ -21,6 +21,8 @@ namespace Imarat_Shariah.Components.Pages
         private bool isEditMode = false;
         private bool isModalVisible = false;
 
+        string ToasterHeading = "Success!";
+        string ToasterBody = "Added!";
 
         protected override async Task OnInitializedAsync()
         {
@@ -70,10 +72,13 @@ namespace Imarat_Shariah.Components.Pages
             if (isEditMode)
             {
                 await _siyajatService.UpdateAsync(siyajat);
+
+                ToasterBody = $"Siyajat form with form number {siyajat.FormNo} updated.";
             }
             else
             {
                 await _siyajatService.AddAsync(siyajat);
+                ToasterBody = $"New siyajat form with form number {siyajat.FormNo} added.";
             }
 
             SiyajatEntries = (await _siyajatService.GetAllAsync()).ToList();

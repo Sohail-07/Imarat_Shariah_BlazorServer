@@ -19,5 +19,10 @@
              OnSubmit="HandleSubmit"
              OnCancel="HandleCancel" />
 
+<div class="alert alert-success alert-dismissible fade show" role="alert">
+    <strong>@ToasterHeading</strong> @ToasterBody
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+
 <!-- Delete Confirmation Dialog -->
 <DialogComponent DialogBoxModel="DialogBoxModel" />
