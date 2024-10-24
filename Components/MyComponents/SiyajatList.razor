@@ -1,8 +1,4 @@
-﻿@if (SiyajatEntries == null)
-{
-    <p class="text-center">Loading...</p>
-}
-else if (!SiyajatEntries.Any())
+﻿@if (!SiyajatEntries.Any())
 {
     <div class="alert alert-dark" role="alert">
         No Siyajat entries found.
@@ -47,3 +43,4 @@ else
         </table>
     </div>
 }
+<LoaderComponent _isLoading="IsLoading" _colorClass="text-success" />

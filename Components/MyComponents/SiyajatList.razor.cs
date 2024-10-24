@@ -17,5 +17,8 @@ namespace Imarat_Shariah.Components.MyComponents
 
         [Parameter]
         public EventCallback<Siyajat> OnDelete { get; set; }
+
+        [Parameter]
+        public bool IsLoading { get; set; } = true;
     }
 }

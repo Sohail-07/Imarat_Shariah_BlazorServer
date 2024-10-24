@@ -27,10 +27,24 @@ namespace Imarat_Shariah.Components.Pages
         private bool showSuccessAlert = false;
         private bool showErrorAlert = false;
 
+        private bool IsLoading = false;  // Initially true to show the loader
+
+
         protected override async Task OnInitializedAsync()
         {
-            SiyajatEntries = (await _siyajatService.GetAllAsync()).ToList();
+            await GetAll();
             filteredSiyajatEntries = SiyajatEntries;
+        }
+
+        private async Task GetAll()
+        {
+            IsLoading = true;
+            await Task.Delay(5000);
+
+            SiyajatEntries = (await _siyajatService.GetAllAsync()).ToList();
+
+            IsLoading = false;
+            StateHasChanged();
         }
 
         private void OpenAddModal()
@@ -48,9 +62,15 @@ namespace Imarat_Shariah.Components.Pages
         }
         private async Task HandleSearch(SiyajatSearchParamsModel searchParams)
         {
+            IsLoading = true;
+            
+            await Task.Delay(5000);
+
             SearchParams = searchParams;
             // Filter and Sort the Siyajat entries based on searchParams
             SiyajatEntries = (await _siyajatService.SearchSiyajatAsync(SearchParams)).ToList();
+            IsLoading = false;
+            StateHasChanged();
         }
 
         private void OpenDeleteConfirmation(Siyajat model)
@@ -66,7 +86,8 @@ namespace Imarat_Shariah.Components.Pages
         private async Task ConfirmDelete(int id)
         {
             await _siyajatService.DeleteAsync(id);
-            SiyajatEntries = (await _siyajatService.GetAllAsync()).ToList();
+            
+            await GetAll();
             DialogBoxModel.IsVisible = false; // Close dialog
         }
 
@@ -84,7 +105,7 @@ namespace Imarat_Shariah.Components.Pages
                 ToasterBody = $"New siyajat form with form number {siyajat.FormNo} added.";
             }
 
-            SiyajatEntries = (await _siyajatService.GetAllAsync()).ToList();
+            await GetAll();
             isModalVisible = false;  // Close modal
 
             TriggerSuccessAlert();

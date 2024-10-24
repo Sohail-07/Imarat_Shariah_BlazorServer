@@ -1,6 +1,4 @@
 ﻿@page "/siyajat"
-@using Imarat_Shariah.Components.CoomonComponents
-
 
 <!-- Alert -->
 <ToasterComponent AlertType="success"
@@ -19,7 +17,10 @@
 </div>
 
 <!-- Siyajat List -->
-<SiyajatList SiyajatEntries="@SiyajatEntries" OnEdit="HandleEdit" OnDelete="OpenDeleteConfirmation" />
+<SiyajatList SiyajatEntries="@SiyajatEntries" 
+             OnEdit="HandleEdit" 
+             OnDelete="OpenDeleteConfirmation" 
+             IsLoading="IsLoading"/>
 
 <!-- Siyajat Form Modal -->
 <SiyajatForm @bind-IsModalVisible="isModalVisible"
