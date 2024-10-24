@@ -23,6 +23,7 @@ namespace Imarat_Shariah.Components.Pages
 
         string ToasterHeading = "Success!";
         string ToasterBody = "Added!";
+        bool showToaster = false;
 
         protected override async Task OnInitializedAsync()
         {
@@ -83,11 +84,31 @@ namespace Imarat_Shariah.Components.Pages
 
             SiyajatEntries = (await _siyajatService.GetAllAsync()).ToList();
             isModalVisible = false;  // Close modal
+
+            // Show success toaster
+            ShowToaster();
         }
 
         private void HandleCancel()
         {
             isModalVisible = false;
         }
+
+        private async void ShowToaster()
+        {
+            showToaster = true;
+            StateHasChanged();  // Update UI
+
+            // Hide the alert after 5 seconds
+            await Task.Delay(5000);
+            HideToaster();
+        }
+
+        private void HideToaster()
+        {
+            showToaster = false;
+            StateHasChanged();  // Force UI update
+        }
+
     }
 }

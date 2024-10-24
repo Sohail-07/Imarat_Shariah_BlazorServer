@@ -1,6 +1,18 @@
 ﻿@page "/siyajat"
 @using Imarat_Shariah.Components.CoomonComponents
 
+
+<!-- Alert -->
+@if (showToaster)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <strong>@ToasterHeading</strong> @ToasterBody
+        <button type="button" class="btn-close" @onclick="HideToaster" aria-label="Close"></button>
+    </div>
+}
+
+
+<!-- Search Bar -->
 <SiyajatSearchBarComponent OnSearch="HandleSearch" />
 
 <!-- Button to open Modal -->
@@ -19,10 +31,6 @@
              OnSubmit="HandleSubmit"
              OnCancel="HandleCancel" />
 
-<div class="alert alert-success alert-dismissible fade show" role="alert">
-    <strong>@ToasterHeading</strong> @ToasterBody
-    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-</div>
 
 <!-- Delete Confirmation Dialog -->
 <DialogComponent DialogBoxModel="DialogBoxModel" />
