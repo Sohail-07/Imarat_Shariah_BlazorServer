@@ -1,0 +1,9 @@
+﻿@inherits ToasterBase
+
+@if (Show)
+{
+    <div class="alert alert-@AlertType alert-dismissible fade show" role="alert">
+        <strong>@AlertHeading</strong> @AlertMessage
+        <button type="button" class="btn-close" @onclick="CloseAlert" aria-label="Close"></button>
+    </div>
+}

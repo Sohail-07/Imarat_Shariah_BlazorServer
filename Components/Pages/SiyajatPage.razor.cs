@@ -23,7 +23,9 @@ namespace Imarat_Shariah.Components.Pages
 
         string ToasterHeading = "Success!";
         string ToasterBody = "Added!";
-        bool showToaster = false;
+
+        private bool showSuccessAlert = false;
+        private bool showErrorAlert = false;
 
         protected override async Task OnInitializedAsync()
         {
@@ -50,7 +52,7 @@ namespace Imarat_Shariah.Components.Pages
             // Filter and Sort the Siyajat entries based on searchParams
             SiyajatEntries = (await _siyajatService.SearchSiyajatAsync(SearchParams)).ToList();
         }
-        
+
         private void OpenDeleteConfirmation(Siyajat model)
         {
             // Set up the dialog box model for confirmation
@@ -85,8 +87,8 @@ namespace Imarat_Shariah.Components.Pages
             SiyajatEntries = (await _siyajatService.GetAllAsync()).ToList();
             isModalVisible = false;  // Close modal
 
-            // Show success toaster
-            ShowToaster();
+            TriggerSuccessAlert();
+            StateHasChanged();
         }
 
         private void HandleCancel()
@@ -94,21 +96,20 @@ namespace Imarat_Shariah.Components.Pages
             isModalVisible = false;
         }
 
-        private async void ShowToaster()
+        private async void TriggerSuccessAlert()
         {
-            showToaster = true;
-            StateHasChanged();  // Update UI
+            showSuccessAlert = true;
 
-            // Hide the alert after 5 seconds
-            await Task.Delay(5000);
-            HideToaster();
+            // You could wait for a moment before triggering auto-hide
+            await Task.Delay(1);  // You can remove this delay or adjust if needed
+
+            // Manually trigger auto-dismiss by calling the ShowAlert method
+            StateHasChanged();
         }
 
-        private void HideToaster()
+        private void OnToasterClosed()
         {
-            showToaster = false;
-            StateHasChanged();  // Force UI update
+            showSuccessAlert = false;
         }
-
     }
 }

@@ -3,14 +3,11 @@
 
 
 <!-- Alert -->
-@if (showToaster)
-{
-    <div class="alert alert-success alert-dismissible fade show" role="alert">
-        <strong>@ToasterHeading</strong> @ToasterBody
-        <button type="button" class="btn-close" @onclick="HideToaster" aria-label="Close"></button>
-    </div>
-}
-
+<ToasterComponent AlertType="success"
+                  AlertHeading="@ToasterHeading"
+                  AlertMessage="@ToasterBody"
+                  Show="@showSuccessAlert"
+                  OnClose="@OnToasterClosed" />
 
 <!-- Search Bar -->
 <SiyajatSearchBarComponent OnSearch="HandleSearch" />
