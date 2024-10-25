@@ -153,5 +153,11 @@ namespace Imarat_Shariah.Components.Pages
             currentPage = pageNumber;
             await GetAll(currentPage, pageSize);
         }
+        private async Task OnPageSizeChanged(int newSize)
+        {
+            pageSize = newSize;
+            currentPage = 1; // Reset to first page with new page size
+            await GetAll(currentPage, pageSize);
+        }
     }
 }
