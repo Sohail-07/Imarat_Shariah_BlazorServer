@@ -101,7 +101,7 @@ namespace Imarat_Shariah.Components.Pages
         {
             await _siyajatService.DeleteAsync(id);
             
-            await GetAll(currentPage, pageSize);
+            await HandleSearch(SearchParams);
             DialogBoxModel.IsVisible = false; // Close dialog
         }
 
@@ -119,7 +119,7 @@ namespace Imarat_Shariah.Components.Pages
                 ToasterBody = $"New siyajat form with form number {siyajat.FormNo} added.";
             }
 
-            await GetAll(currentPage, pageSize);
+            await HandleSearch(SearchParams);
             isModalVisible = false;  // Close modal
 
             TriggerSuccessAlert();
@@ -151,13 +151,13 @@ namespace Imarat_Shariah.Components.Pages
         {
             if (pageNumber < 1 || pageNumber > totalPages) return;
             currentPage = pageNumber;
-            await GetAll(currentPage, pageSize);
+            await HandleSearch(SearchParams);
         }
         private async Task OnPageSizeChanged(int newSize)
         {
             pageSize = newSize;
             currentPage = 1; // Reset to first page with new page size
-            await GetAll(currentPage, pageSize);
+            await HandleSearch(SearchParams);
         }
     }
 }
