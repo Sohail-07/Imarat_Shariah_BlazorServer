@@ -6,7 +6,7 @@ namespace Imarat_Shariah.Components.MyComponents
     public partial class SiyajatSearchBarComponent
     {
         [Parameter]
-        public EventCallback<SiyajatSearchParamsModel> OnSearch { get; set; }
+        public EventCallback<SiyajatSearchParamsModel> OnSearch { get; set; } = new();
 
         public int? SearchFormNo { get; set; } = null;
         public int? SearchQazatNo { get; set; } = null!;

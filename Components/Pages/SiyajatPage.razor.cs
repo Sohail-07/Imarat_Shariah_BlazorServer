@@ -14,7 +14,7 @@ namespace Imarat_Shariah.Components.Pages
 
         public DialogBoxModel DialogBoxModel { get; set; } = new();
 
-        SiyajatSearchParamsModel SearchParams { get; set; }
+        SiyajatSearchParamsModel SearchParams { get; set; } = new();
 
         private List<Siyajat> SiyajatEntries = new();
         private Siyajat selectedSiyajat = new();
