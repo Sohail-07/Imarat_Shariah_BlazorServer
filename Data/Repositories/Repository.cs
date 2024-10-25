@@ -20,9 +20,18 @@ namespace Imarat_Shariah.Data.Repositories
             return await _dbSet.FindAsync(id);
         }
 
-        public async Task<IEnumerable<TEntity>> GetAllAsync()
+        public async Task<IEnumerable<TEntity>> GetAllAsync(int pageNumber, int pageSize)
         {
-            return await _dbSet.ToListAsync();
+            return await _dbSet
+                    .Skip((pageNumber - 1) * pageSize)
+                    .Take(pageSize)
+                    .ToListAsync();
+        }
+
+        // Method to return the total count of records (needed for pagination)
+        public async Task<int> GetTotalCountAsync()
+        {
+            return await _dbSet.CountAsync();
         }
 
         public async Task AddAsync(TEntity entity)

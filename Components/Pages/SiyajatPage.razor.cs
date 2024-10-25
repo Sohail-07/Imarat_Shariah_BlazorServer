@@ -29,19 +29,29 @@ namespace Imarat_Shariah.Components.Pages
 
         private bool IsLoading = false;  // Initially true to show the loader
 
+        private int currentPage = 1;
+        private int pageSize = 5;
+        private int totalPages = 0;
+        private int totalEntries = 0;
 
         protected override async Task OnInitializedAsync()
         {
-            await GetAll();
+            await GetAll(currentPage, pageSize);
             filteredSiyajatEntries = SiyajatEntries;
         }
 
-        private async Task GetAll()
+        private async Task GetAll(int pageNumber, int pageSize)
         {
             IsLoading = true;
-            await Task.Delay(5000);
+            //await Task.Delay(5000);
 
-            SiyajatEntries = (await _siyajatService.GetAllAsync()).ToList();
+            var siyajats = await _siyajatService.GetAllAsync(pageNumber, pageSize);
+            SiyajatEntries = siyajats.ToList();
+
+            totalEntries = await _siyajatService.GetTotalCountAsync();
+
+            // Assuming total count is available, you'll have to calculate the totalPages based on that count
+            totalPages = (int)Math.Ceiling((double)totalEntries / pageSize);
 
             IsLoading = false;
             StateHasChanged();
@@ -63,12 +73,16 @@ namespace Imarat_Shariah.Components.Pages
         private async Task HandleSearch(SiyajatSearchParamsModel searchParams)
         {
             IsLoading = true;
-            
-            await Task.Delay(5000);
+            //await Task.Delay(5000);
 
             SearchParams = searchParams;
-            // Filter and Sort the Siyajat entries based on searchParams
-            SiyajatEntries = (await _siyajatService.SearchSiyajatAsync(SearchParams)).ToList();
+            SiyajatEntries = (await _siyajatService.SearchSiyajatAsync(SearchParams, currentPage, pageSize)).ToList();
+
+            totalEntries = await _siyajatService.GetTotalCountForSearchAsync(SearchParams);
+
+            // Assuming total count is available, you'll have to calculate the totalPages based on that count
+            totalPages = (int)Math.Ceiling((double)totalEntries / pageSize);
+
             IsLoading = false;
             StateHasChanged();
         }
@@ -87,7 +101,7 @@ namespace Imarat_Shariah.Components.Pages
         {
             await _siyajatService.DeleteAsync(id);
             
-            await GetAll();
+            await GetAll(currentPage, pageSize);
             DialogBoxModel.IsVisible = false; // Close dialog
         }
 
@@ -105,7 +119,7 @@ namespace Imarat_Shariah.Components.Pages
                 ToasterBody = $"New siyajat form with form number {siyajat.FormNo} added.";
             }
 
-            await GetAll();
+            await GetAll(currentPage, pageSize);
             isModalVisible = false;  // Close modal
 
             TriggerSuccessAlert();
@@ -131,6 +145,13 @@ namespace Imarat_Shariah.Components.Pages
         private void OnToasterClosed()
         {
             showSuccessAlert = false;
+        }
+
+        private async Task GoToPage(int pageNumber)
+        {
+            if (pageNumber < 1 || pageNumber > totalPages) return;
+            currentPage = pageNumber;
+            await GetAll(currentPage, pageSize);
         }
     }
 }

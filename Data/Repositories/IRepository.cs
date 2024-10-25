@@ -5,7 +5,8 @@ namespace Imarat_Shariah.Data.Repositories
     public interface IRepository<TEntity> where TEntity : class
     {
         Task<TEntity> GetByIdAsync(int id);
-        Task<IEnumerable<TEntity>> GetAllAsync();
+        Task<IEnumerable<TEntity>> GetAllAsync(int pageNumber, int pageSize);
+        Task<int> GetTotalCountAsync();
         Task AddAsync(TEntity entity);
         Task UpdateAsync(TEntity entity);
         Task DeleteAsync(TEntity entity);

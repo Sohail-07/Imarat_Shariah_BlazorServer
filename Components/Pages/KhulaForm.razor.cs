@@ -17,7 +17,7 @@ namespace Imarat_Shariah.Components.Pages
 
         protected override async Task OnInitializedAsync()
         {
-            khulas = (await _khulaService.GetAllAsync()).ToList();
+            khulas = (await _khulaService.GetAllAsync(1,100)).ToList();
         }
 
         private async Task HandelSubmit()
@@ -30,7 +30,7 @@ namespace Imarat_Shariah.Components.Pages
             {
                 await _khulaService.AddAsync(khula);
             }
-            khulas = (await _khulaService.GetAllAsync()).ToList();
+            khulas = (await _khulaService.GetAllAsync(1, 100)).ToList();
             khula = new Khula(); // Reset form
         }
 
@@ -42,7 +42,7 @@ namespace Imarat_Shariah.Components.Pages
         private async Task DeleteKhula(int id)
         {
             await _khulaService.DeleteAsync(id);
-            khulas = (await _khulaService.GetAllAsync()).ToList();
+            khulas = (await _khulaService.GetAllAsync(1, 100)).ToList();
         }
     }
 }

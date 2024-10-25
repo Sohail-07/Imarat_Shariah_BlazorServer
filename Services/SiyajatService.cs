@@ -21,9 +21,14 @@ namespace Imarat_Shariah.Services
             return await _siyajatGenricRepository.GetByIdAsync(id);
         }
 
-        public async Task<IEnumerable<Siyajat>> GetAllAsync()
+        public async Task<IEnumerable<Siyajat>> GetAllAsync(int pageNumber, int pageSize)
         {
-            return await _siyajatGenricRepository.GetAllAsync();
+            return await _siyajatGenricRepository.GetAllAsync(pageNumber,pageSize);
+        }
+
+        public async Task<int> GetTotalCountAsync()
+        {
+            return await _siyajatGenricRepository.GetTotalCountAsync();
         }
 
         public async Task AddAsync(Siyajat siyajat)
@@ -52,9 +57,14 @@ namespace Imarat_Shariah.Services
             await _siyajatGenricRepository.UpdateAsync(siyajat);
         }
 
-        public async Task<IEnumerable<Siyajat>> SearchSiyajatAsync(SiyajatSearchParamsModel searchParams)
+        public async Task<IEnumerable<Siyajat>> SearchSiyajatAsync(SiyajatSearchParamsModel searchParams, int pageNumber, int pageSize)
         {
-            return await _siyajatRepository.SearchSiyajatAsync(searchParams);
+            return await _siyajatRepository.SearchSiyajatAsync(searchParams,pageNumber,pageSize);
+        }
+
+        public async Task<int> GetTotalCountForSearchAsync(SiyajatSearchParamsModel searchParams)
+        {
+            return await _siyajatRepository.GetTotalCountForSearchAsync(searchParams);
         }
     }
 }

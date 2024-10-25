@@ -18,9 +18,9 @@ namespace Imarat_Shariah.Services
             return await _khulaRepository.GetByIdAsync(id);
         }
 
-        public async Task<IEnumerable<Khula>> GetAllAsync()
+        public async Task<IEnumerable<Khula>> GetAllAsync(int pageNumber, int pageSize)
         {
-            return await _khulaRepository.GetAllAsync();
+            return await _khulaRepository.GetAllAsync(pageNumber, pageSize);
         }
 
         public async Task AddAsync(Khula khula)

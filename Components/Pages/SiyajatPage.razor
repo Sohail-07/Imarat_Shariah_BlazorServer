@@ -12,7 +12,7 @@
 
 <!-- Button to open Modal -->
 <div class="d-flex justify-content-between align-items-center mb-3">
-    <h1 class="display-6">Siyajat List</h1>
+    <h1 class="display-6">@totalEntries Siyajat Records Found</h1>
     <button class="btn btn-success btn-lg" @onclick="OpenAddModal">+ Add New Siyajat</button>
 </div>
 
@@ -21,6 +21,11 @@
              OnEdit="HandleEdit" 
              OnDelete="OpenDeleteConfirmation" 
              IsLoading="IsLoading"/>
+
+<!-- Pagination Component -->
+<PaginationComponent CurrentPage="currentPage"
+                     TotalPages="totalPages"
+                     OnPageChanged="GoToPage" />
 
 <!-- Siyajat Form Modal -->
 <SiyajatForm @bind-IsModalVisible="isModalVisible"
