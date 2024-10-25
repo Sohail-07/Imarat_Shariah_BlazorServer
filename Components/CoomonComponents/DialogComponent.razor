@@ -14,8 +14,8 @@
                 <p>@DialogBoxModel.Message</p>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" @onclick="() => DialogBoxModel.OnCancel.InvokeAsync(false)">Cancel</button>
-                <button type="button" class="btn btn-danger" @onclick="() => DialogBoxModel.OnConfirm.InvokeAsync(true)">Delete</button>
+                <button type="button" class="btn btn-secondary" @onclick="() => DialogBoxModel.OnCancel.InvokeAsync(false)"><i class="bi bi-x-lg"></i></button>
+                <button type="button" class="btn btn-danger" @onclick="() => DialogBoxModel.OnConfirm.InvokeAsync(true)"><i class="bi bi-trash3"></i></button>
             </div>
         </div>
     </div>

@@ -58,11 +58,11 @@
                                 <InputText id="qariName" class="form-control" @bind-Value="SiyajatModel.QariName" />
                                 <ValidationMessage For="@(() => SiyajatModel.QariName)" class="text-danger" />
                             </div>
-
+@* 
                             <div class="mb-3 form-check">
                                 <InputCheckbox id="isActive" class="form-check-input" @bind-Value="SiyajatModel.IsActive" />
                                 <label class="form-check-label" for="isActive">Is Active</label>
-                            </div>
+                            </div> *@
                         </div>
 
                         <!-- Second Column: PDF Upload Area -->
@@ -82,8 +82,8 @@
                     </div>
 
                     <div class="modal-footer">
-                        <button type="submit" class="btn btn-primary">Submit</button>
-                        <button type="button" class="btn btn-secondary" @onclick="CloseModal">Cancel</button>
+                        <button type="button" class="btn btn-secondary" @onclick="CloseModal"><i class="bi bi-x-lg"></i></button>
+                        <button type="submit" class="btn btn-success">Submit</button>
                     </div>
                 </EditForm>
             </div>

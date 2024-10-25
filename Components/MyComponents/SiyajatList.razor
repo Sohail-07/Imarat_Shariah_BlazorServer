@@ -30,11 +30,11 @@ else
                         <td>@siyajat.GroomName</td>
                         <td>@siyajat.BrideName</td>
                         <td class="text-center">
-                            <button class="btn btn-primary btn-sm me-2" title="Edit" @onclick="() => OnEdit.InvokeAsync(siyajat.Id)">
-                                Edit
+                            <button class="btn btn-success btn-sm me-2" title="Edit" @onclick="() => OnEdit.InvokeAsync(siyajat.Id)">
+                                <i class="bi bi-pencil-square"></i>
                             </button>
                             <button class="btn btn-danger btn-sm" title="Delete" @onclick="() => OnDelete.InvokeAsync(siyajat)">
-                                Delete
+                                <i class="bi bi-trash3"></i>
                             </button>
                         </td>
                     </tr>
