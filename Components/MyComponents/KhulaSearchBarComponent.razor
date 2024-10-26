@@ -1,0 +1,42 @@
+﻿<div class="card shadow-sm border-light mb-4">
+    <div class="card-header bg-success text-white">
+        <h4 class="mb-0 text-center">Search Khula Forms</h4>
+    </div>
+    <div class="card-body">
+        <div class="row g-3">
+            <!-- Form No -->
+            <div class="col-md-2">
+                <label for="formNo" class="form-label fw-bold">Form No</label>
+                <input type="text" class="form-control" id="formNo" placeholder="Enter Form No" @bind="SearchFormNo" />
+            </div>
+
+            <!-- Groom Name -->
+            <div class="col-md-4">
+                <label for="groomName" class="form-label fw-bold">Groom Name</label>
+                <input type="text" class="form-control" id="groomName" placeholder="Enter Groom Name" @bind="SearchGroomName" />
+            </div>
+
+            <!-- Bride Name -->
+            <div class="col-md-4">
+                <label for="brideName" class="form-label fw-bold">Bride Name</label>
+                <input type="text" class="form-control" id="brideName" placeholder="Enter Bride Name" @bind="SearchBrideName" />
+            </div>
+
+            <!-- Sort by -->
+            <div class="col-md-2">
+                <label for="sortBy" class="form-label fw-bold">Sort by</label>
+                <select class="form-select" id="sortBy" @bind="SortBy">
+                    <option value="">-- Sort by --</option>
+                    <option value="FormNo">Form No</option>
+                    <option value="NikahDate">Nikah Date</option>
+                </select>
+            </div>
+            
+        </div>
+
+        <div class="d-flex justify-content-center mt-4">
+            <button class="btn btn-success px-4 me-3" @onclick="Search"><i class="bi bi-search"></i> Search</button>
+            <button class="btn btn-secondary px-4" @onclick="Reset"><i class="bi bi-arrow-clockwise"></i> Reset</button>
+        </div>
+    </div>
+</div>
