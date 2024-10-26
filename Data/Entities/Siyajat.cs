@@ -7,10 +7,10 @@ namespace Imarat_Shariah.Data.Entities
         public int Id { get; set; }
 
         [Required]
-        public int FormNo { get; set; }
+        public string FormNo { get; set; }
         
         [Required]
-        public int QazatNo { get; set; }
+        public string QazatNo { get; set; }
         
         [Required]
         public string FormType { get; set; }

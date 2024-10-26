@@ -2,8 +2,8 @@
 {
     public class SiyajatSearchParamsModel
     {
-        public int? FormNo { get; set; } = null;
-        public int? QazatNo { get; set; } = null;
+        public string? FormNo { get; set; } = null;
+        public string? QazatNo { get; set; } = null;
         public string? GroomName { get; set; }
         public string? BrideName { get; set; }
         public string? FormType { get; set; }

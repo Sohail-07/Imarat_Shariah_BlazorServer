@@ -8,8 +8,8 @@ namespace Imarat_Shariah.Components.MyComponents
         [Parameter]
         public EventCallback<SiyajatSearchParamsModel> OnSearch { get; set; } = new();
 
-        public int? SearchFormNo { get; set; } = null;
-        public int? SearchQazatNo { get; set; } = null!;
+        public string? SearchFormNo { get; set; } = null;
+        public string? SearchQazatNo { get; set; } = null!;
         public string? SearchGroomName { get; set; }
         public string? SearchBrideName { get; set; }
         public string? FilterFormType { get; set; }

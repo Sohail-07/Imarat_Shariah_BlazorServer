@@ -7,7 +7,7 @@
             </div>
 
             <div class="modal-body">
-                <EditForm Model="@SiyajatModel" OnValidSubmit="HandleValidSubmit">
+                <EditForm Model="@KhulaModel" OnValidSubmit="HandleValidSubmit">
                     <DataAnnotationsValidator />
                     @* <ValidationSummary class="text-danger" /> *@
 
@@ -16,53 +16,27 @@
                         <div class="col-md-6">
                             <div class="mb-3">
                                 <label for="formNo" class="form-label">Form No</label>
-                                <InputText id="formNo" class="form-control" @bind-Value="SiyajatModel.FormNo" />
-                                <ValidationMessage For="@(() => SiyajatModel.FormNo)" class="text-danger" />
-                            </div>
-
-                            <div class="mb-3">
-                                <label for="qazatNo" class="form-label">Qazat No</label>
-                                <InputText id="qazatNo" class="form-control" @bind-Value="SiyajatModel.QazatNo" />
-                                <ValidationMessage For="@(() => SiyajatModel.QazatNo)" class="text-danger" />
-                            </div>
-                            <div class="mb-3">
-                                <label for="formType" class="form-label">Form Type</label>
-                                <InputSelect id="formType" class="form-control" @bind-Value="SiyajatModel.FormType">
-                                    <option value="">-- Select Form Type --</option>
-                                    <option value="Type1">Type1</option>
-                                    <option value="Type2">Type2</option>
-                                </InputSelect>
-                                <ValidationMessage For="@(() => SiyajatModel.FormType)" class="text-danger" />
+                                <InputText id="formNo" class="form-control" @bind-Value="KhulaModel.FormNumber" />
+                                <ValidationMessage For="@(() => KhulaModel.FormNumber)" class="text-danger" />
                             </div>
 
                             <div class="mb-3">
                                 <label for="nikahDate" class="form-label">Nikah Date</label>
-                                <InputDate id="nikahDate" class="form-control" @bind-Value="SiyajatModel.NikahDate" />
-                                <ValidationMessage For="@(() => SiyajatModel.NikahDate)" class="text-danger" />
+                                <InputDate id="nikahDate" class="form-control" @bind-Value="KhulaModel.NikahDate" />
+                                <ValidationMessage For="@(() => KhulaModel.NikahDate)" class="text-danger" />
                             </div>
 
                             <div class="mb-3">
                                 <label for="groomName" class="form-label">Groom Name</label>
-                                <InputText id="groomName" class="form-control" @bind-Value="SiyajatModel.GroomName" />
-                                <ValidationMessage For="@(() => SiyajatModel.GroomName)" class="text-danger" />
+                                <InputText id="groomName" class="form-control" @bind-Value="KhulaModel.GroomName" />
+                                <ValidationMessage For="@(() => KhulaModel.GroomName)" class="text-danger" />
                             </div>
 
                             <div class="mb-3">
                                 <label for="brideName" class="form-label">Bride Name</label>
-                                <InputText id="brideName" class="form-control" @bind-Value="SiyajatModel.BrideName" />
-                                <ValidationMessage For="@(() => SiyajatModel.BrideName)" class="text-danger" />
+                                <InputText id="brideName" class="form-control" @bind-Value="KhulaModel.BrideName" />
+                                <ValidationMessage For="@(() => KhulaModel.BrideName)" class="text-danger" />
                             </div>
-
-                            <div class="mb-3">
-                                <label for="qariName" class="form-label">Qari Name</label>
-                                <InputText id="qariName" class="form-control" @bind-Value="SiyajatModel.QariName" />
-                                <ValidationMessage For="@(() => SiyajatModel.QariName)" class="text-danger" />
-                            </div>
-@* 
-                            <div class="mb-3 form-check">
-                                <InputCheckbox id="isActive" class="form-check-input" @bind-Value="SiyajatModel.IsActive" />
-                                <label class="form-check-label" for="isActive">Is Active</label>
-                            </div> *@
                         </div>
 
                         <!-- Second Column: PDF Upload Area -->
