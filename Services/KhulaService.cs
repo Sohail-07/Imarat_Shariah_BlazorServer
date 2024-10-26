@@ -57,12 +57,12 @@ namespace Imarat_Shariah.Services
             await _khulaGenericRepository.UpdateAsync(khula);
         }
 
-        public async Task<IEnumerable<Khula>> SearchSiyajatAsync(SiyajatSearchParamsModel searchParams, int pageNumber, int pageSize)
+        public async Task<IEnumerable<Khula>> SearchSiyajatAsync(SearchParamsModel searchParams, int pageNumber, int pageSize)
         {
             return await _khulaRepository.SearchSiyajatAsync(searchParams, pageNumber, pageSize);
         }
 
-        public async Task<int> GetTotalCountForSearchAsync(SiyajatSearchParamsModel searchParams)
+        public async Task<int> GetTotalCountForSearchAsync(SearchParamsModel searchParams)
         {
             return await _khulaRepository.GetTotalCountForSearchAsync(searchParams);
         }

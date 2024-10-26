@@ -11,7 +11,7 @@ namespace Imarat_Shariah.Services.Interfaces
         Task AddAsync(Khula khula);
         Task UpdateAsync(Khula khula);
         Task DeleteAsync(int id);
-        Task<IEnumerable<Khula>> SearchSiyajatAsync(SiyajatSearchParamsModel searchParams, int pageNumber, int pageSize);
-        Task<int> GetTotalCountForSearchAsync(SiyajatSearchParamsModel searchParams);
+        Task<IEnumerable<Khula>> SearchSiyajatAsync(SearchParamsModel searchParams, int pageNumber, int pageSize);
+        Task<int> GetTotalCountForSearchAsync(SearchParamsModel searchParams);
     }
 }

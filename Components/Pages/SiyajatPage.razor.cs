@@ -14,7 +14,7 @@ namespace Imarat_Shariah.Components.Pages
 
         public DialogBoxModel DialogBoxModel { get; set; } = new();
 
-        SiyajatSearchParamsModel SearchParams { get; set; } = new();
+        SearchParamsModel SearchParams { get; set; } = new();
 
         private List<Siyajat> SiyajatEntries = new();
         private Siyajat selectedSiyajat = new();
@@ -70,7 +70,7 @@ namespace Imarat_Shariah.Components.Pages
             isEditMode = true;
             isModalVisible = true;
         }
-        private async Task HandleSearch(SiyajatSearchParamsModel searchParams)
+        private async Task HandleSearch(SearchParamsModel searchParams)
         {
             IsLoading = true;
             //await Task.Delay(5000);

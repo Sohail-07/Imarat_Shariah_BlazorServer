@@ -6,7 +6,7 @@ namespace Imarat_Shariah.Components.MyComponents
     public partial class KhulaSearchBarComponent
     {
         [Parameter]
-        public EventCallback<SiyajatSearchParamsModel> OnSearch { get; set; } = new();
+        public EventCallback<SearchParamsModel> OnSearch { get; set; } = new();
 
         public string? SearchFormNo { get; set; } = null;
         public string? SearchGroomName { get; set; }
@@ -15,7 +15,7 @@ namespace Imarat_Shariah.Components.MyComponents
 
         private async Task Search()
         {
-            var searchParams = new SiyajatSearchParamsModel
+            var searchParams = new SearchParamsModel
             {
                 FormNo = SearchFormNo,
                 GroomName = SearchGroomName,
@@ -33,7 +33,7 @@ namespace Imarat_Shariah.Components.MyComponents
             SearchBrideName = null;
             SortBy = null;
 
-            await OnSearch.InvokeAsync(new SiyajatSearchParamsModel());
+            await OnSearch.InvokeAsync(new SearchParamsModel());
         }
     }
 }

@@ -5,7 +5,7 @@ namespace Imarat_Shariah.Data.Repositories
 {
     public interface ISiyajatRepository
     {
-        Task<IEnumerable<Siyajat>> SearchSiyajatAsync(SiyajatSearchParamsModel searchParams, int pageNumber, int pageSize);
-        Task<int> GetTotalCountForSearchAsync(SiyajatSearchParamsModel searchParams);
+        Task<IEnumerable<Siyajat>> SearchSiyajatAsync(SearchParamsModel searchParams, int pageNumber, int pageSize);
+        Task<int> GetTotalCountForSearchAsync(SearchParamsModel searchParams);
     }
 }

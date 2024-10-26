@@ -1,6 +1,6 @@
 ﻿namespace Imarat_Shariah.Components.ViewModels
 {
-    public class SiyajatSearchParamsModel
+    public class SearchParamsModel
     {
         public string? FormNo { get; set; } = null;
         public string? QazatNo { get; set; } = null;

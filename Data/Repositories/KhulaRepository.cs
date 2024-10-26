@@ -13,7 +13,7 @@ namespace Imarat_Shariah.Data.Repositories
             _context = context;
         }
 
-        public async Task<IEnumerable<Khula>> SearchSiyajatAsync(SiyajatSearchParamsModel searchParams, int pageNumber, int pageSize)
+        public async Task<IEnumerable<Khula>> SearchSiyajatAsync(SearchParamsModel searchParams, int pageNumber, int pageSize)
         {
             var query = _context.khulas.AsQueryable();
 
@@ -52,7 +52,7 @@ namespace Imarat_Shariah.Data.Repositories
         }
 
         // Method to get the total count of filtered records for search
-        public async Task<int> GetTotalCountForSearchAsync(SiyajatSearchParamsModel searchParams)
+        public async Task<int> GetTotalCountForSearchAsync(SearchParamsModel searchParams)
         {
             var query = _context.khulas.AsQueryable();
 

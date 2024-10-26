@@ -57,12 +57,12 @@ namespace Imarat_Shariah.Services
             await _siyajatGenricRepository.UpdateAsync(siyajat);
         }
 
-        public async Task<IEnumerable<Siyajat>> SearchSiyajatAsync(SiyajatSearchParamsModel searchParams, int pageNumber, int pageSize)
+        public async Task<IEnumerable<Siyajat>> SearchSiyajatAsync(SearchParamsModel searchParams, int pageNumber, int pageSize)
         {
             return await _siyajatRepository.SearchSiyajatAsync(searchParams,pageNumber,pageSize);
         }
 
-        public async Task<int> GetTotalCountForSearchAsync(SiyajatSearchParamsModel searchParams)
+        public async Task<int> GetTotalCountForSearchAsync(SearchParamsModel searchParams)
         {
             return await _siyajatRepository.GetTotalCountForSearchAsync(searchParams);
         }

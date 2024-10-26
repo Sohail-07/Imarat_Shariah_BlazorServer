@@ -16,7 +16,7 @@ namespace Imarat_Shariah.Components.Pages
         private Khula selectedKhula = new ();
         private List<Khula>? KhulaEntries { get; set; } = new();
         private List<Khula> filteredKhulaEntries = new();
-        SiyajatSearchParamsModel SearchParams { get; set; } = new();
+        SearchParamsModel SearchParams { get; set; } = new();
 
         public DialogBoxModel DialogBoxModel { get; set; } = new();
 
@@ -72,7 +72,7 @@ namespace Imarat_Shariah.Components.Pages
             isEditMode = true;
             isModalVisible = true;
         }
-        private async Task HandleSearch(SiyajatSearchParamsModel searchParams)
+        private async Task HandleSearch(SearchParamsModel searchParams)
         {
             IsLoading = true;
             //await Task.Delay(5000);
