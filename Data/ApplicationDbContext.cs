@@ -9,6 +9,7 @@ namespace Imarat_Shariah.Data
         
         public DbSet<Siyajat> siyajats { get; set; }    
         public DbSet<Khula> khulas { get; set; }
+        public DbSet<LogEntry> logEntries { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

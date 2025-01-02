@@ -4,6 +4,7 @@ using Imarat_Shariah.Services.Interfaces;
 using Imarat_Shariah.Services;
 using Imarat_Shariah.Data;
 using Microsoft.EntityFrameworkCore;
+using Imarat_Shariah.Services.Logger;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,6 +15,11 @@ builder.Services.AddRazorComponents()
 // DATABSE CONNECTION
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
         options.UseNpgsql(builder.Configuration.GetConnectionString("DB_CONNECTION")));
+
+// Add the custom logger provider
+builder.Logging.ClearProviders();
+builder.Logging.AddProvider(new DatabaseLoggerProvider(builder.Services.BuildServiceProvider()));
+
 
 // REGISTER REPOSITORIES AND SERVICES
 builder.Services.AddScoped<ITimeConversion, TimeConversion>();

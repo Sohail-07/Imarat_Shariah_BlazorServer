@@ -1,0 +1,85 @@
+﻿@page "/logs"
+
+<h3 class="mb-4">System Logs</h3>
+
+<div class="card shadow-sm">
+    <div class="card-header">
+        <form class="row g-3">
+            <div class="col-md-3">
+                <label for="logLevel" class="form-label">Log Level</label>
+                <select id="logLevel" class="form-select" @bind="Filter.LogLevel">
+                    <option value="">All</option>
+                    <option>Trace</option>
+                    <option>Debug</option>
+                    <option>Information</option>
+                    <option>Warning</option>
+                    <option>Error</option>
+                    <option>Critical</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label for="startDate" class="form-label">Start Date</label>
+                <input type="date" id="startDate" class="form-control" @bind="Filter.StartDate" />
+            </div>
+            <div class="col-md-3">
+                <label for="endDate" class="form-label">End Date</label>
+                <input type="date" id="endDate" class="form-control" @bind="Filter.EndDate" />
+            </div>
+            <div class="col-md-3 d-flex align-items-end">
+                <button type="button" class="btn btn-primary me-2" @onclick="ApplyFilter">Filter</button>
+                <button type="button" class="btn btn-secondary" @onclick="ResetFilter">Reset</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="card-body p-0">
+        <table class="table table-striped table-hover mb-0">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Log Level</th>
+                    <th>Message</th>
+                    <th>Timestamp</th>
+                    <th>Category</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (LogEntries?.Count > 0)
+                {
+                    @foreach (var log in LogEntries)
+                    {
+                        <tr>
+                            <td>@log.Id</td>
+                            <td><span class="badge bg-@GetBadgeColor(log.LogLevel)">@log.LogLevel</span></td>
+                            <td>@log.Message</td>
+                            <td>@log.Timestamp.ToString("yyyy-MM-dd HH:mm:ss")</td>
+                            <td>@log.Category</td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="5" class="text-center">No logs found.</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <div class="card-footer d-flex justify-content-between align-items-center">
+        <div>
+            Showing @((CurrentPage - 1) * PageSize + 1) to @((CurrentPage - 1) * PageSize + LogEntries.Count) of @TotalCount entries
+        </div>
+        <nav>
+            <ul class="pagination mb-0">
+                <li class="page-item @(CurrentPage == 1 ? "disabled" : "")">
+                    <button class="page-link" @onclick="PreviousPage">Previous</button>
+                </li>
+                <li class="page-item @(CurrentPage == TotalPages ? "disabled" : "")">
+                    <button class="page-link" @onclick="NextPage">Next</button>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>
