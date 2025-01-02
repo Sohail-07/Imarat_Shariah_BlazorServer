@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Imarat_Shariah.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241021045915_InitialCreate")]
+    [Migration("20250102044404_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -83,6 +83,7 @@ namespace Imarat_Shariah.Migrations
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("BrideName")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("CreatedBy")
@@ -94,13 +95,16 @@ namespace Imarat_Shariah.Migrations
                     b.Property<DateTime?>("DeletedDate")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<int>("FormNo")
-                        .HasColumnType("integer");
+                    b.Property<string>("FormNo")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<string>("FormType")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("GroomName")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<bool>("IsActive")
@@ -119,10 +123,12 @@ namespace Imarat_Shariah.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("QariName")
+                        .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int>("QazatNo")
-                        .HasColumnType("integer");
+                    b.Property<string>("QazatNo")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
