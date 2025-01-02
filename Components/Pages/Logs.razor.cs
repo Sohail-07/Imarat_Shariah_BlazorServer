@@ -1,7 +1,14 @@
-﻿namespace Imarat_Shariah.Components.Pages
+﻿using Imarat_Shariah.Data.Entities;
+using Imarat_Shariah.Data.Repositories;
+using Microsoft.AspNetCore.Components;
+
+namespace Imarat_Shariah.Components.Pages
 {
     public partial class Logs
     {
+        [Inject]
+        ILogRepository logRepository { get; set; }
+
         private List<LogEntry> LogEntries { get; set; } = new List<LogEntry>();
         private LogFilter Filter { get; set; } = new LogFilter();
         private int CurrentPage { get; set; } = 1;
@@ -10,12 +17,13 @@
 
         private async Task LoadLogs()
         {
-            //var response = await Http.GetFromJsonAsync<PaginatedLogs>($"api/logs?logLevel={Filter.LogLevel}&startDate={Filter.StartDate}&endDate={Filter.EndDate}&page={CurrentPage}&pageSize={PageSize}");
-            //if (response != null)
-            //{
-            //    LogEntries = response.Items;
-            //    TotalCount = response.TotalCount;
-            //}
+            var response = await logRepository.GetAllLogsAsync();
+
+            if (response != null)
+            {
+                LogEntries = response;
+                TotalCount = response.Count();
+            }
         }
 
         private async Task ApplyFilter()
@@ -72,21 +80,6 @@
             public string LogLevel { get; set; }
             public DateTime? StartDate { get; set; }
             public DateTime? EndDate { get; set; }
-        }
-
-        private class PaginatedLogs
-        {
-            public List<LogEntry> Items { get; set; } = new();
-            public int TotalCount { get; set; }
-        }
-
-        private class LogEntry
-        {
-            public int Id { get; set; }
-            public string LogLevel { get; set; }
-            public string Message { get; set; }
-            public DateTime Timestamp { get; set; }
-            public string Category { get; set; }
         }
     }
 }

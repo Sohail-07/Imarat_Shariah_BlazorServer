@@ -28,6 +28,7 @@ builder.Services.AddScoped<ISiyajatService, SiyajatService>();
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 builder.Services.AddScoped<IKhulaRepository, KhulaRepository>();
 builder.Services.AddScoped<ISiyajatRepository, SiyajatRepository>();
+builder.Services.AddScoped<ILogRepository, LogRepository>();
 
 var app = builder.Build();
 

@@ -50,7 +50,7 @@
                     {
                         <tr>
                             <td>@log.Id</td>
-                            <td><span class="badge bg-@GetBadgeColor(log.LogLevel)">@log.LogLevel</span></td>
+                            <td><span class="badge bg-@GetBadgeColor(log.LogLevel.ToString())">@log.LogLevel</span></td>
                             <td>@log.Message</td>
                             <td>@log.Timestamp.ToString("yyyy-MM-dd HH:mm:ss")</td>
                             <td>@log.Category</td>
