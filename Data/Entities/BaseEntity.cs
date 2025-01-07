@@ -7,6 +7,7 @@
         public string? CreatedBy { get; set; }
         public string? ModifiedBy { get; set; }
         public string? PDFPath { get; set; }
+        public string? PreviewFileUrl { get; set; }
         public DateTime? DeletedDate { get; set; } 
         public bool IsActive { get; set; } = true;
     }
