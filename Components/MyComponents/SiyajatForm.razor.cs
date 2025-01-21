@@ -1,5 +1,6 @@
 ﻿using Imarat_Shariah.Data.Entities;
 using Imarat_Shariah.Services;
+using Imarat_Shariah.Services.Interfaces;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Components.Web;
@@ -33,6 +34,9 @@ namespace Imarat_Shariah.Components.MyComponents
 
         [Inject]
         IJSRuntime JSRuntime { get; set; }
+
+        [Inject]
+        IFileManagement _fileManagemnt { get; set; }
 
         [Inject]
         FileManager FileManager { get; set; }
@@ -71,33 +75,10 @@ namespace Imarat_Shariah.Components.MyComponents
 
             if (SelectedFile != null)
             {
-                // Validate file extension
-                var fileExtension = Path.GetExtension(SelectedFile.Name).ToLower(); // Get file extension and convert to lower case
+                var data = await _fileManagemnt.HandelSelectedFile(SelectedFile);
 
-                // Check if the file is a PDF
-                if (fileExtension != ".pdf")
-                {
-                    // Show error message if the file is not a PDF
-                    await JSRuntime.InvokeVoidAsync("alert", "Only PDF files are allowed.");
-                    SelectedFile = null;
-                    PreviewFileUrl = null;
-                    return;
-                }
-
-                long maxAllowedSize = 5 * 1024 * 1024; // 5 MB max size
-
-                if (SelectedFile.Size > maxAllowedSize)
-                {
-                    await JSRuntime.InvokeVoidAsync("alert", "The selected file exceeds the maximum allowed size of 5 MB.");
-                    SelectedFile = null;
-                    PreviewFileUrl = null;
-                    return;
-                }
-
-                // Generate the file preview (only for PDFs)
-                var tempStream = new MemoryStream();
-                await SelectedFile.OpenReadStream(maxAllowedSize).CopyToAsync(tempStream);
-                PreviewFileUrl = $"data:application/pdf;base64,{Convert.ToBase64String(tempStream.ToArray())}";
+                PreviewFileUrl = data.Item1;
+                SelectedFile = data.Item2;
                 SiyajatModel.PreviewFileUrl = PreviewFileUrl;
             }
 
