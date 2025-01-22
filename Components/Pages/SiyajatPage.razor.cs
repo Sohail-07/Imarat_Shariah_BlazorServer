@@ -43,7 +43,6 @@ namespace Imarat_Shariah.Components.Pages
         private async Task GetAll(int pageNumber, int pageSize)
         {
             IsLoading = true;
-            //await Task.Delay(5000);
 
             var siyajats = await _siyajatService.GetAllAsync(pageNumber, pageSize);
             SiyajatEntries = siyajats.ToList();
@@ -73,7 +72,6 @@ namespace Imarat_Shariah.Components.Pages
         private async Task HandleSearch(SearchParamsModel searchParams)
         {
             IsLoading = true;
-            //await Task.Delay(5000);
 
             SearchParams = searchParams;
             SiyajatEntries = (await _siyajatService.SearchSiyajatAsync(SearchParams, currentPage, pageSize)).ToList();

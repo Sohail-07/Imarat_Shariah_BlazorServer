@@ -1,31 +1,20 @@
 ﻿@if (_isLoading)
 {
     <div class="loader-overlay">
-        <div class="spinner-grow @_colorClass" role="status" style="width: 4rem; height: 4rem;">
-            <span class="sr-only">Loading...</span>
+        <div class="dot-loader" style="--loader-color: @_color;">
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
         </div>
     </div>
 }
 
-<style>
-    .loader-overlay {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent white overlay */
-        z-index: 1050;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-</style>
-
-@code{
+@code {
     [Parameter]
     public bool _isLoading { get; set; }
 
     [Parameter]
-    public string _colorClass { get; set; } = "text-success";
+    public string _color { get; set; } = "#28a745"; // Default color (green)
+
+    // You can optionally provide logic to dynamically change `_color` or other values if required
 }
