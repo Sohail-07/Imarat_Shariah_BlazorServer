@@ -1,11 +1,8 @@
 ﻿using Imarat_Shariah.Data.Entities;
-using Imarat_Shariah.Services;
 using Imarat_Shariah.Services.Interfaces;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Components.Web;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.JSInterop;
 
 namespace Imarat_Shariah.Components.MyComponents
 {
@@ -33,13 +30,8 @@ namespace Imarat_Shariah.Components.MyComponents
         public string? PreviewFileUrl { get; set; }
 
         [Inject]
-        IJSRuntime JSRuntime { get; set; }
-
-        [Inject]
         IFileManagement _fileManagemnt { get; set; }
 
-        [Inject]
-        FileManager FileManager { get; set; }
 
         private Siyajat NewFileRecord = new();
         private string? ErrorMessage;
@@ -49,9 +41,11 @@ namespace Imarat_Shariah.Components.MyComponents
 
         private async Task HandleValidSubmit()
         {
-            await HandleFileAdd();
+            IsLoading = true;
             await OnSubmit.InvokeAsync(SiyajatModel);
             await CloseModal(); // Close modal after submit
+            IsLoading = false;
+            StateHasChanged();
         }
 
         private async Task CloseModal()
@@ -63,14 +57,17 @@ namespace Imarat_Shariah.Components.MyComponents
 
         private async Task RemovePDF()
         {
+            IsLoading = true;
             SiyajatModel.PDFPath = null;
             SiyajatModel.PreviewFileUrl = null;
+            IsLoading = false;
         }
 
         private string GetTitle() => IsEditMode ? "Edit Siyajat Entry" : "Add New Siyajat";
 
         private async Task HandleFileSelected(InputFileChangeEventArgs e)
         {
+            IsLoading = true;
             SelectedFile = e.File;
 
             if (SelectedFile != null)
@@ -81,49 +78,8 @@ namespace Imarat_Shariah.Components.MyComponents
                 SelectedFile = data.Item2;
                 SiyajatModel.PreviewFileUrl = PreviewFileUrl;
             }
-
+            IsLoading = false;
             StateHasChanged();
-        }
-
-        private async Task HandleFileAdd()
-        {
-            IsLoading = true; // Start loading spinner
-
-            // Set a larger maximum file size limit (e.g., 5 MB = 5 * 1024 * 1024)
-            long maxAllowedSize = 5 * 1024 * 1024;
-            if (SelectedFile != null)
-            {
-                var fileExtension = Path.GetExtension(SelectedFile.Name).ToLower(); // Get file extension and convert to lower case
-
-                // Check if the file is a PDF
-                if (fileExtension != ".pdf")
-                {
-                    // Show error message if the file is not a PDF
-                    ErrorMessage = "Only PDF files are allowed.";
-                    IsLoading = false; // Stop loading spinner
-                    return;
-                }
-
-                var newFileName = SiyajatModel.QazatNo + fileExtension; // Rename the file with user-provided name + extension
-
-                var filePath = FileManager.GetFilePath(newFileName); // Use new file name with extension
-
-                // Save the file to the local directory
-                await using var fileStream = new FileStream(filePath, FileMode.Create);
-                await SelectedFile.OpenReadStream(maxAllowedSize).CopyToAsync(fileStream);
-
-                // Set file path in the new record
-                SiyajatModel.PDFPath = filePath;
-                // Save the record in the database
-                //await FileRepo.AddFileAsync(NewFileRecord);
-
-                // Reset the form
-                NewFileRecord = new Siyajat();
-                SelectedFile = null;
-                PreviewFileUrl = null;
-            }
-
-            IsLoading = false; // Stop loading spinner
         }
 
         private void HandleDrop(DragEventArgs e)
