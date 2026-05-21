@@ -71,7 +71,7 @@ namespace Imarat_Shariah.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("khulas");
+                    b.ToTable("khulas", (string)null);
                 });
 
             modelBuilder.Entity("Imarat_Shariah.Data.Entities.LogEntry", b =>
@@ -105,7 +105,7 @@ namespace Imarat_Shariah.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("logEntries");
+                    b.ToTable("logEntries", (string)null);
                 });
 
             modelBuilder.Entity("Imarat_Shariah.Data.Entities.Siyajat", b =>
@@ -169,7 +169,7 @@ namespace Imarat_Shariah.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("siyajats");
+                    b.ToTable("siyajats", (string)null);
                 });
 #pragma warning restore 612, 618
         }
