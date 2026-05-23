@@ -1,0 +1,121 @@
+﻿@page "/admin/users"
+@attribute [Authorize(Roles = "Admin")]
+@inject IInternalUserManager UserManagerService
+@inject IJSRuntime JS
+
+<div class="container-fluid p-4">
+    <h3 class="fw-bold mb-4 text-dark"><i class="bi bi-shield-lock-fill text-success"></i> Security & Staff Management</h3>
+
+    <div class="row">
+        <!-- Add New Staff Form Card -->
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm border-0 p-4">
+                <h5 class="fw-bold text-success mb-3">Register New Staff</h5>
+                <EditForm Model="NewUser" OnValidSubmit="RegisterStaff">
+                    <div class="mb-3">
+                        <label class="form-label">Email Address</label>
+                        <input type="email" class="form-control" @bind-value="NewUser.Email" placeholder="staff@imarat.org" required />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Temporary Password</label>
+                        <input type="password" class="form-control" @bind-value="NewUser.Password" placeholder="••••••••" required />
+                    </div>
+                    <button type="submit" class="btn btn-success w-100 fw-bold">Create Account</button>
+                </EditForm>
+            </div>
+        </div>
+
+        <!-- Users List Table -->
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm border-0 p-3">
+                <h5 class="fw-bold text-dark mb-3">System Active Users</h5>
+                <div class="list-group">
+                    @foreach (var user in UsersList)
+                    {
+                        <button type="button" 
+                                class="list-group-item list-group-item-action @(SelectedUser?.Id == user.Id ? "active bg-success border-success" : "")" 
+                                @onclick="() => LoadUserPermissions(user)">
+                            <i class="bi bi-person-fill"></i> @user.Email
+                        </button>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <!-- Dynamic Permissions Matrix Configuration -->
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm border-0 p-4">
+                @if (SelectedUser != null)
+                {
+                    <h5 class="fw-bold text-dark mb-1">Manage Permissions</h5>
+                    <p class="text-muted small mb-3">Target Account: @SelectedUser.Email</p>
+
+                    <div class="border-top pt-3">
+                        @foreach (var perm in CurrentPermissions)
+                        {
+                            <div class="form-check form-switch mb-3">
+                                <input class="form-check-input" type="checkbox" id="@perm.PermissionValue" @bind="perm.IsSelected" style="cursor:pointer;" />
+                                <label class="form-check-label fw-medium text-secondary" for="@perm.PermissionValue" style="cursor:pointer;">
+                                    @perm.DisplayName
+                                </label>
+                            </div>
+                        }
+                    </div>
+
+                    <button type="button" class="btn btn-primary w-100 fw-bold mt-2" @onclick="SaveChanges">
+                        Save Permissions Matrix
+                    </button>
+                }
+                else
+                {
+                    <div class="text-center text-muted p-5">
+                        <i class="bi bi-sliders2-vertical fs-1 d-block mb-2"></i>
+                        Select a user from the active list to alter access matrix controls.
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    private List<IdentityUser> UsersList = new();
+    private RegisterUserModel NewUser = new();
+    private IdentityUser? SelectedUser;
+    private List<PermissionSelection> CurrentPermissions = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadUsers();
+    }
+
+    private async Task LoadUsers() => UsersList = await UserManagerService.GetAllUsersAsync();
+
+    private async Task RegisterStaff()
+    {
+        var result = await UserManagerService.CreateStaffUserAsync(NewUser);
+        if (result.IsSuccess)
+        {
+            await JS.InvokeVoidAsync("alert", "Staff Account generated successfully.");
+            NewUser = new();
+            await LoadUsers();
+        }
+        else
+        {
+            await JS.InvokeVoidAsync("alert", $"Error: {result.Error}");
+        }
+    }
+
+    private async Task LoadUserPermissions(IdentityUser user)
+    {
+        SelectedUser = user;
+        CurrentPermissions = await UserManagerService.GetUserPermissionsAsync(user.Id);
+    }
+
+    private async Task SaveChanges()
+    {
+        if (SelectedUser == null) return;
+        await UserManagerService.UpdateUserPermissionsAsync(SelectedUser.Id, CurrentPermissions);
+        await JS.InvokeVoidAsync("alert", "Access Control Matrix updated instantly.");
+    }
+}

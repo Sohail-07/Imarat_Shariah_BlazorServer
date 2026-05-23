@@ -6,6 +6,7 @@ using Imarat_Shariah.Services.Interfaces;
 using Imarat_Shariah.Services.Logger;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -32,6 +33,15 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
 })
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddDefaultTokenProviders();
+
+// CURRENT FIX: Custom Login aur Access Denied paths configure karo
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.LoginPath = "/login";         // Default "/Account/Login" ko overwrite kiya
+    options.AccessDeniedPath = "/login";  // Agar unauthorized access ho to kahan bhejna hai
+    options.ExpireTimeSpan = TimeSpan.FromDays(5); // User bar-bar logout na ho
+    options.SlidingExpiration = true;
+});
 
 // Blazor Server Authentication Setup
 builder.Services.AddRazorComponents().AddInteractiveServerComponents();
@@ -66,6 +76,7 @@ builder.Services.AddScoped<ISiyajatRepository, SiyajatRepository>();
 builder.Services.AddScoped<ILogRepository, LogRepository>();
 builder.Services.AddScoped<IFileManagement, FileManagement>();
 builder.Services.AddScoped<IStorageService, LocalStorageService>();
+builder.Services.AddScoped<IInternalUserManager, InternalUserManager>();
 builder.Services.AddScoped<FileManager>();
 
 var app = builder.Build();
@@ -90,5 +101,26 @@ app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode();
 
 await DatabaseSeeder.SeedAdminUserAsync(app.Services.CreateScope().ServiceProvider);
+
+app.MapPost("/api/auth/login", async (
+    [FromForm] string email,
+    [FromForm] string password,
+    [FromServices] SignInManager<IdentityUser> signInManager) =>
+{
+    var result = await signInManager.PasswordSignInAsync(email, password, isPersistent: true, lockoutOnFailure: false);
+
+    if (result.Succeeded)
+    {
+        return Results.Redirect("/"); // Login hone ke baad direct dashboard pe bhejo
+    }
+
+    return Results.Redirect("/login?error=Invalid Credentials");
+}).DisableAntiforgery();
+
+app.MapGet("/api/auth/logout", async ([FromServices] SignInManager<IdentityUser> signInManager) =>
+{
+    await signInManager.SignOutAsync();
+    return Results.Redirect("/login");
+});
 
 app.Run();

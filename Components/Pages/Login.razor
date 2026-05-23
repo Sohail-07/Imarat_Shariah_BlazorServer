@@ -1,0 +1,47 @@
+﻿@page "/login"
+@layout EmptyLayout  //Taki sidebar/navbar na dikhe
+@attribute [AllowAnonymous]
+@inject NavigationManager NavManager
+
+<div class="container d-flex justify-content-center align-items-center" style="min-height: 100vh;">
+    <div class="card p-4 shadow-lg" style="width: 400px; border-radius: 12px;">
+        <div class="text-center mb-4">
+            <h3 class="fw-bold text-success">Imarat Shariah</h3>
+            <p class="text-muted">Backoffice Login Portal</p>
+        </div>
+
+        @if (!string.IsNullOrEmpty(ErrorMessage))
+        {
+            <div class="alert alert-danger text-center py-2">@ErrorMessage</div>
+        }
+
+        <!-- Standard HTML Form directly posting to our endpoint -->
+        <form action="/api/auth/login" method="POST">
+            <div class="mb-3">
+                <label class="form-label fw-semibold">Email Address</label>
+                <input type="email" name="email" class="form-control" placeholder="user@imarat.org" required />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label fw-semibold">Password</label>
+                <input type="password" name="password" class="form-control" placeholder="••••••••" required />
+            </div>
+
+            <button type="submit" class="btn btn-success w-100 py-2 fw-bold mt-2">Sign In</button>
+        </form>
+    </div>
+</div>
+
+@code {
+    private string? ErrorMessage;
+
+    protected override void OnInitialized()
+    {
+        // URL se query string read karke check karo agar koi error message pass hua hai
+        var uri = NavManager.ToAbsoluteUri(NavManager.Uri);
+        if (Microsoft.AspNetCore.WebUtilities.QueryHelpers.ParseQuery(uri.Query).TryGetValue("error", out var errorVal))
+        {
+            ErrorMessage = errorVal;
+        }
+    }
+}

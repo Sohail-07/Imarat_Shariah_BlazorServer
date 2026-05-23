@@ -1,36 +1,89 @@
-﻿<div class="top-row ps-3 navbar navbar-dark">
+﻿<div class="top-row ps-3 navbar navbar-dark bg-dark">
     <div class="container-fluid">
-        <a class="navbar-brand" href="">Imarat_Shariah</a>
+        <a class="navbar-brand fw-bold text-success" href="">
+            <i class="bi bi-shield-shaded me-2"></i>Imarat Shariah
+        </a>
     </div>
 </div>
 
 <input type="checkbox" title="Navigation menu" class="navbar-toggler" />
 
 <div class="nav-scrollable" onclick="document.querySelector('.navbar-toggler').click()">
-    <nav class="flex-column">
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                <span class="bi bi-house-door-fill-nav-menu m-2" aria-hidden="true"></span> Home
-            </NavLink>
+    <nav class="flex-column d-flex justify-content-between h-100">
+
+        <div>
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
+                    <span class="bi bi-house-door-fill me-2" aria-hidden="true"></span> Home
+                </NavLink>
+            </div>
+
+            <AuthorizeView Policy="CanViewKhula">
+                <Authorized>
+                    <div class="nav-item px-3">
+                        <NavLink class="nav-link" href="khula">
+                            <span class="bi bi-file-earmark-text-fill me-2" aria-hidden="true"></span> Khula Records
+                        </NavLink>
+                    </div>
+                </Authorized>
+            </AuthorizeView>
+
+            <AuthorizeView Policy="CanViewSiyajat">
+                <Authorized>
+                    <div class="nav-item px-3">
+                        <NavLink class="nav-link" href="siyajat">
+                            <span class="bi bi-journal-text me-2" aria-hidden="true"></span> Siyajat Records
+                        </NavLink>
+                    </div>
+                </Authorized>
+            </AuthorizeView>
+
+            <AuthorizeView Roles="Admin">
+                <Authorized>
+                    <div class="nav-item px-3">
+                        <NavLink class="nav-link" href="admin/users">
+                            <span class="bi bi-people-fill me-2" aria-hidden="true"></span> Staff Management
+                        </NavLink>
+                    </div>
+                </Authorized>
+            </AuthorizeView>
+
+            <AuthorizeView Roles="Admin">
+                <Authorized>
+                    <div class="nav-item px-3">
+                        <NavLink class="nav-link" href="logs">
+                            <span class="bi bi-terminal-fill me-2" aria-hidden="true"></span> System Logs
+                        </NavLink>
+                    </div>
+                </Authorized>
+            </AuthorizeView>
         </div>
 
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="khula">
-                <span class="bi bi-plus-square-fill-nav-menu m-2" aria-hidden="true"></span> Khula
-            </NavLink>
+        <div class="mt-auto border-top border-secondary p-3 bg-opacity-10 bg-white">
+            <AuthorizeView>
+                <Authorized>
+                    <div class="d-flex flex-column align-items-start text-light mb-2">
+                        <div class="d-flex align-items-center mb-2">
+                            <i class="bi bi-person-circle fs-4 text-success me-2"></i>
+                            <div class="d-flex flex-column">
+                                <span class="small text-muted" style="font-size: 0.75rem;">Logged In As:</span>
+                                <span class="fw-semibold text-truncate" style="max-width: 170px;">@context.User.Identity?.Name</span>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="/api/auth/logout" class="btn btn-sm btn-danger w-100 fw-bold py-1 mt-1">
+                        <i class="bi bi-box-arrow-right me-1"></i> Log Out
+                    </a>
+                </Authorized>
+                <NotAuthorized>
+                    <div class="px-2">
+                        <a href="/login" class="btn btn-sm btn-success w-100 fw-bold">
+                            <i class="bi bi-box-arrow-in-right me-1"></i> Portal Sign In
+                        </a>
+                    </div>
+                </NotAuthorized>
+            </AuthorizeView>
         </div>
 
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="siyajat">
-                <span class="bi bi-list-nested-nav-menu m-2" aria-hidden="true"></span> Siyajat
-            </NavLink>
-        </div>
-
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="logs">
-                <span class="bi bi-list-nested-nav-menu m-2" aria-hidden="true"></span> Logs
-            </NavLink>
-        </div>
     </nav>
 </div>
-
