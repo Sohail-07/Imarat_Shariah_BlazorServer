@@ -1,5 +1,6 @@
-﻿using System.Security.Claims;
+﻿using Imarat_Shariah.Utilities;
 using Microsoft.AspNetCore.Identity;
+using System.Security.Claims;
 
 namespace Imarat_Shariah.Data
 {
@@ -11,10 +12,9 @@ namespace Imarat_Shariah.Data
             var userManager = serviceProvider.GetRequiredService<UserManager<IdentityUser>>();
 
             // 1. Create Admin Role if not exists
-            const string adminRoleName = "Admin";
-            if (!await roleManager.RoleExistsAsync(adminRoleName))
+            if (!await roleManager.RoleExistsAsync(ApplicationPermissions.Roles.Admin))
             {
-                await roleManager.CreateAsync(new IdentityRole(adminRoleName));
+                await roleManager.CreateAsync(new IdentityRole(ApplicationPermissions.Roles.Admin));
             }
 
             // 2. Create Master Admin User
@@ -34,19 +34,22 @@ namespace Imarat_Shariah.Data
                 var result = await userManager.CreateAsync(adminUser, "Admin@123");
                 if (result.Succeeded)
                 {
-                    await userManager.AddToRoleAsync(adminUser, adminRoleName);
+                    await userManager.AddToRoleAsync(adminUser, ApplicationPermissions.Roles.Admin);
 
                     // 3. Assign Master Claims to Admin Role
-                    var adminRole = await roleManager.FindByNameAsync(adminRoleName);
-                    var allPermissions = new List<string>
-                    {
-                        "Permissions.Siyajat.View", "Permissions.Siyajat.Create", "Permissions.Siyajat.Update", "Permissions.Siyajat.Delete",
-                        "Permissions.Khula.View", "Permissions.Khula.Create", "Permissions.Khula.Update", "Permissions.Khula.Delete"
-                    };
+                    var adminRole = await roleManager.FindByNameAsync(ApplicationPermissions.Roles.Admin);
+                    
+                    // Utility se direct saari permissions loop me chalao
+                    var allPermissions = ApplicationPermissions.GetAllPermissions();
 
                     foreach (var permission in allPermissions)
                     {
-                        await roleManager.AddClaimAsync(adminRole!, new Claim("Permission", permission));
+                        // Check lagao taaki duplicate claims add na hon database me
+                        var existingClaims = await roleManager.GetClaimsAsync(adminRole!);
+                        if (!existingClaims.Any(c => c.Value == permission))
+                        {
+                            await roleManager.AddClaimAsync(adminRole!, new Claim(ApplicationPermissions.PermissionClaimType, permission));
+                        }
                     }
                 }
             }

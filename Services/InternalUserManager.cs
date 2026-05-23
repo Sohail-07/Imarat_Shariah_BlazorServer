@@ -1,5 +1,6 @@
 ﻿using Imarat_Shariah.Components.ViewModels.UserManagementModels;
 using Imarat_Shariah.Services.Interfaces;
+using Imarat_Shariah.Utilities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -37,19 +38,21 @@ namespace Imarat_Shariah.Services
 
             // Check user existing claims from database
             var userClaims = await _userManager.GetClaimsAsync(user);
-            var existingPermissions = userClaims.Where(c => c.Type == "Permission").Select(c => c.Value).ToList();
+            var existingPermissions = userClaims.Where(c => c.Type == ApplicationPermissions.PermissionClaimType).Select(c => c.Value).ToList();
 
             // All system permissions blueprint
+            // Mapping using Centralized Constants Class
             var allPermissions = new List<PermissionSelection>
             {
-                new() { DisplayName = "Siyajat - View Records", PermissionValue = "Permissions.Siyajat.View" },
-                new() { DisplayName = "Siyajat - Create New", PermissionValue = "Permissions.Siyajat.Create" },
-                new() { DisplayName = "Siyajat - Update/Edit", PermissionValue = "Permissions.Siyajat.Update" },
-                new() { DisplayName = "Siyajat - Delete Record", PermissionValue = "Permissions.Siyajat.Delete" },
-                new() { DisplayName = "Khula - View Records", PermissionValue = "Permissions.Khula.View" },
-                new() { DisplayName = "Khula - Create New", PermissionValue = "Permissions.Khula.Create" },
-                new() { DisplayName = "Khula - Update/Edit", PermissionValue = "Permissions.Khula.Update" },
-                new() { DisplayName = "Khula - Delete Record", PermissionValue = "Permissions.Khula.Delete" },
+                new() { DisplayName = "Siyajat - View Records", PermissionValue = ApplicationPermissions.Siyajat.View },
+                new() { DisplayName = "Siyajat - Create New", PermissionValue = ApplicationPermissions.Siyajat.Create },
+                new() { DisplayName = "Siyajat - Update/Edit", PermissionValue = ApplicationPermissions.Siyajat.Update },
+                new() { DisplayName = "Siyajat - Delete Record", PermissionValue = ApplicationPermissions.Siyajat.Delete },
+
+                new() { DisplayName = "Khula - View Records", PermissionValue = ApplicationPermissions.Khula.View },
+                new() { DisplayName = "Khula - Create New", PermissionValue = ApplicationPermissions.Khula.Create },
+                new() { DisplayName = "Khula - Update/Edit", PermissionValue = ApplicationPermissions.Khula.Update },
+                new() { DisplayName = "Khula - Delete Record", PermissionValue = ApplicationPermissions.Khula.Delete }
             };
 
             foreach (var p in allPermissions)
@@ -68,7 +71,7 @@ namespace Imarat_Shariah.Services
 
             // Clean slate: Purane saare permission claims delete karo user ke
             var currentClaims = await _userManager.GetClaimsAsync(user);
-            var permissionClaims = currentClaims.Where(c => c.Type == "Permission");
+            var permissionClaims = currentClaims.Where(c => c.Type == ApplicationPermissions.PermissionClaimType);
             foreach (var claim in permissionClaims)
             {
                 await _userManager.RemoveClaimAsync(user, claim);
@@ -77,7 +80,7 @@ namespace Imarat_Shariah.Services
             // Selected checkboxed permissions inject karo dobara
             foreach (var p in permissions.Where(x => x.IsSelected))
             {
-                await _userManager.AddClaimAsync(user, new System.Security.Claims.Claim("Permission", p.PermissionValue));
+                await _userManager.AddClaimAsync(user, new System.Security.Claims.Claim(ApplicationPermissions.PermissionClaimType, p.PermissionValue));
             }
 
             // Security stamp refresh karo taaki persistent circuit immediate update pull kare

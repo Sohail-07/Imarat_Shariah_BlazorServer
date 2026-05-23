@@ -4,6 +4,7 @@ using Imarat_Shariah.Data.Repositories;
 using Imarat_Shariah.Services;
 using Imarat_Shariah.Services.Interfaces;
 using Imarat_Shariah.Services.Logger;
+using Imarat_Shariah.Utilities;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -53,17 +54,17 @@ builder.Services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuth
 // Fine-Grained Policies Setup
 builder.Services.AddAuthorizationCore(options =>
 {
-    // Siyajat Dynamic Policies
-    options.AddPolicy("CanViewSiyajat", p => p.RequireClaim("Permission", "Permissions.Siyajat.View"));
-    options.AddPolicy("CanCreateSiyajat", p => p.RequireClaim("Permission", "Permissions.Siyajat.Create"));
-    options.AddPolicy("CanUpdateSiyajat", p => p.RequireClaim("Permission", "Permissions.Siyajat.Update"));
-    options.AddPolicy("CanDeleteSiyajat", p => p.RequireClaim("Permission", "Permissions.Siyajat.Delete"));
+    // Siyajat Dynamic Policies using Constants
+    options.AddPolicy(ApplicationPermissions.Policies.CanViewSiyajat, p => p.RequireClaim(ApplicationPermissions.PermissionClaimType, ApplicationPermissions.Siyajat.View));
+    options.AddPolicy(ApplicationPermissions.Policies.CanCreateSiyajat, p => p.RequireClaim(ApplicationPermissions.PermissionClaimType, ApplicationPermissions.Siyajat.Create));
+    options.AddPolicy(ApplicationPermissions.Policies.CanUpdateSiyajat, p => p.RequireClaim(ApplicationPermissions.PermissionClaimType, ApplicationPermissions.Siyajat.Update));
+    options.AddPolicy(ApplicationPermissions.Policies.CanDeleteSiyajat, p => p.RequireClaim(ApplicationPermissions.PermissionClaimType, ApplicationPermissions.Siyajat.Delete));
 
-    // Khula Dynamic Policies
-    options.AddPolicy("CanViewKhula", p => p.RequireClaim("Permission", "Permissions.Khula.View"));
-    options.AddPolicy("CanCreateKhula", p => p.RequireClaim("Permission", "Permissions.Khula.Create"));
-    options.AddPolicy("CanUpdateKhula", p => p.RequireClaim("Permission", "Permissions.Khula.Update"));
-    options.AddPolicy("CanDeleteKhula", p => p.RequireClaim("Permission", "Permissions.Khula.Delete"));
+    // Khula Dynamic Policies using Constants
+    options.AddPolicy(ApplicationPermissions.Policies.CanViewKhula, p => p.RequireClaim(ApplicationPermissions.PermissionClaimType, ApplicationPermissions.Khula.View));
+    options.AddPolicy(ApplicationPermissions.Policies.CanCreateKhula, p => p.RequireClaim(ApplicationPermissions.PermissionClaimType, ApplicationPermissions.Khula.Create));
+    options.AddPolicy(ApplicationPermissions.Policies.CanUpdateKhula, p => p.RequireClaim(ApplicationPermissions.PermissionClaimType, ApplicationPermissions.Khula.Update));
+    options.AddPolicy(ApplicationPermissions.Policies.CanDeleteKhula, p => p.RequireClaim(ApplicationPermissions.PermissionClaimType, ApplicationPermissions.Khula.Delete));
 });
 
 // REGISTER REPOSITORIES AND SERVICES

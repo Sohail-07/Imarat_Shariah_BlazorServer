@@ -1,5 +1,5 @@
 ﻿@page "/admin/users"
-@attribute [Authorize(Roles = "Admin")]
+@attribute [Authorize(Roles = ApplicationPermissions.Roles.Admin)]
 @inject IInternalUserManager UserManagerService
 @inject IJSRuntime JS
 

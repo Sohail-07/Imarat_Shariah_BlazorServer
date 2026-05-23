@@ -18,7 +18,7 @@
                 </NavLink>
             </div>
 
-            <AuthorizeView Policy="CanViewKhula">
+            <AuthorizeView Policy="@ApplicationPermissions.Policies.CanViewKhula">
                 <Authorized>
                     <div class="nav-item px-3">
                         <NavLink class="nav-link" href="khula">
@@ -28,7 +28,7 @@
                 </Authorized>
             </AuthorizeView>
 
-            <AuthorizeView Policy="CanViewSiyajat">
+            <AuthorizeView Policy="@ApplicationPermissions.Policies.CanViewSiyajat">
                 <Authorized>
                     <div class="nav-item px-3">
                         <NavLink class="nav-link" href="siyajat">
@@ -38,7 +38,7 @@
                 </Authorized>
             </AuthorizeView>
 
-            <AuthorizeView Roles="Admin">
+            <AuthorizeView Roles="@ApplicationPermissions.Roles.Admin">
                 <Authorized>
                     <div class="nav-item px-3">
                         <NavLink class="nav-link" href="admin/users">
@@ -48,7 +48,7 @@
                 </Authorized>
             </AuthorizeView>
 
-            <AuthorizeView Roles="Admin">
+            <AuthorizeView Roles="@ApplicationPermissions.Roles.Admin">
                 <Authorized>
                     <div class="nav-item px-3">
                         <NavLink class="nav-link" href="logs">

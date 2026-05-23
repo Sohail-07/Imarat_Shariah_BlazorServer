@@ -1,4 +1,5 @@
 ﻿@page "/siyajat"
+@attribute [Authorize(Policy = ApplicationPermissions.Policies.CanViewSiyajat)]
 
 <!-- Alert -->
 <ToasterComponent AlertType="success"
