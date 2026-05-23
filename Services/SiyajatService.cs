@@ -2,6 +2,7 @@
 using Imarat_Shariah.Data.Entities;
 using Imarat_Shariah.Data.Repositories;
 using Imarat_Shariah.Services.Interfaces;
+using Microsoft.AspNetCore.Components.Authorization;
 
 namespace Imarat_Shariah.Services
 {
@@ -9,11 +10,12 @@ namespace Imarat_Shariah.Services
     {
         private readonly IRepository<Siyajat> _siyajatGenricRepository;
         private readonly ISiyajatRepository _siyajatRepository;
-
-        public SiyajatService(IRepository<Siyajat> siyajatGenericRepository, ISiyajatRepository siyajatRepository)
+        private readonly AuthenticationStateProvider _authStateProvider;
+        public SiyajatService(IRepository<Siyajat> siyajatGenericRepository, ISiyajatRepository siyajatRepository, AuthenticationStateProvider authStateProvider)
         {
             _siyajatGenricRepository = siyajatGenericRepository;
             _siyajatRepository = siyajatRepository;
+            _authStateProvider = authStateProvider;
         }
 
         public async Task<Siyajat> GetByIdAsync(int id)
@@ -23,6 +25,15 @@ namespace Imarat_Shariah.Services
 
         public async Task<IEnumerable<Siyajat>> GetAllAsync(int pageNumber, int pageSize)
         {
+            var authState = await _authStateProvider.GetAuthenticationStateAsync();
+            var user = authState.User;
+
+            // Double secure data layer constraint check
+            if (!user.HasClaim("Permission", "Permissions.Siyajat.View") && !user.IsInRole("Admin"))
+            {
+                throw new UnauthorizedAccessException("Security Breach Alert: Create operation was rejected by server.");
+            }
+
             return await _siyajatGenricRepository.GetAllAsync(pageNumber,pageSize);
         }
 
