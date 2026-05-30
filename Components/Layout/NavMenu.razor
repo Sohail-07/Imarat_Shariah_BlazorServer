@@ -62,7 +62,7 @@
         <div class="mt-auto border-top border-secondary p-3 bg-opacity-10 bg-white">
             <AuthorizeView>
                 <Authorized>
-                    <div class="d-flex flex-column align-items-start text-light mb-2">
+                    @* <div class="d-flex flex-column align-items-start text-light mb-2">
                         <div class="d-flex align-items-center mb-2">
                             <i class="bi bi-person-circle fs-4 text-success me-2"></i>
                             <div class="d-flex flex-column">
@@ -70,7 +70,14 @@
                                 <span class="fw-semibold text-truncate" style="max-width: 170px;">@context.User.Identity?.Name</span>
                             </div>
                         </div>
-                    </div>
+                    </div> *@
+                    <a href="/profile" class="text-decoration-none text-light d-flex align-items-center mb-2">
+                        <i class="bi bi-person-circle fs-4 text-success me-2"></i>
+                        <div class="d-flex flex-column">
+                            <span class="small text-muted" style="font-size: 0.75rem;">Welcome:</span>
+                            <span class="fw-semibold text-truncate" style="max-width: 170px;">@context.User.Identity?.Name</span>
+                        </div>
+                    </a>
                     <a href="/api/auth/logout" class="btn btn-sm btn-danger w-100 fw-bold py-1 mt-1">
                         <i class="bi bi-box-arrow-right me-1"></i> Log Out
                     </a>

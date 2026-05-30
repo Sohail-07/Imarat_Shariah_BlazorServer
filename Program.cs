@@ -79,6 +79,7 @@ builder.Services.AddScoped<ILogRepository, LogRepository>();
 builder.Services.AddScoped<IFileManagement, FileManagement>();
 builder.Services.AddScoped<IStorageService, LocalStorageService>();
 builder.Services.AddScoped<IInternalUserManager, InternalUserManager>();
+builder.Services.AddScoped<IUserProfileService, UserProfileService>();
 builder.Services.AddScoped<FileManager>();
 
 var app = builder.Build();
