@@ -95,5 +95,42 @@ namespace Imarat_Shariah.Services
             // Security stamp refresh karo taaki persistent circuit immediate update pull kare
             await _userManager.UpdateSecurityStampAsync(user);
         }
+
+        // Toggle Lockout / Account Block Logic
+        public async Task ToggleUserLockoutAsync(string userId)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null) return;
+
+            var isLocked = await _userManager.IsLockedOutAsync(user);
+            if (isLocked)
+            {
+                // Unblock: Lockout time khatam kar do
+                await _userManager.SetLockoutEndDateAsync(user, null);
+            }
+            else
+            {
+                // Block: Agle 100 saal tak ke liye lock kar do account
+                await _userManager.SetLockoutEndDateAsync(user, DateTimeOffset.UtcNow.AddYears(100));
+            }
+            await _userManager.UpdateSecurityStampAsync(user); // Force clear active browser sessions
+        }
+
+        // Force Reset Password by Admin
+        public async Task<(bool IsSuccess, string? Error)> ForceResetPasswordAsync(string userId, string newPassword)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null) return (false, "User nahi mila.");
+
+            var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+            var result = await _userManager.ResetPasswordAsync(user, token, newPassword);
+
+            if (result.Succeeded)
+            {
+                await _userManager.UpdateSecurityStampAsync(user);
+                return (true, null);
+            }
+            return (false, result.Errors.FirstOrDefault()?.Description);
+        }
     }
 }

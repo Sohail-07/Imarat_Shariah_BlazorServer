@@ -1,134 +1,256 @@
 ﻿@page "/admin/users"
+@attribute [Authorize(Roles = "Admin")]
 @using Imarat_Shariah.Data.Entities.Identity
-@attribute [Authorize(Roles = ApplicationPermissions.Roles.Admin)]
+@using Microsoft.AspNetCore.Identity
+@using Imarat_Shariah.Data.Entities
+@using Imarat_Shariah.Services
 @inject IInternalUserManager UserManagerService
 @inject IJSRuntime JS
 
-<div class="container-fluid p-4">
-    <h3 class="fw-bold mb-4 text-dark"><i class="bi bi-shield-lock-fill text-success"></i> Security & Staff Management</h3>
+<div class="container-fluid px-4 py-3">
+    <div class="d-flex justify-content-between align-items-center mb-4 border-bottom pb-3">
+        <div>
+            <h3 class="fw-bold text-dark m-0"><i class="bi bi-shield-lock-fill text-success me-2"></i>Staff Access Management</h3>
+            <p class="text-muted small m-0">Control staff credentials, fine-grained application permission matrices, and account lockdown states.</p>
+        </div>
+        @if (SelectedUser != null)
+        {
+            <button class="btn btn-outline-success btn-sm fw-bold" @onclick="ResetToRegistrationMode">
+                <i class="bi bi-person-plus-fill me-1"></i> Add New Staff Member
+            </button>
+        }
+    </div>
 
     <div class="row">
-        <!-- Add New Staff Form Card -->
-        <div class="col-md-4 mb-4">
-            <div class="card shadow-sm border-0 p-4">
-                <h5 class="fw-bold text-success mb-3">Register New Staff</h5>
-                <EditForm Model="NewUser" OnValidSubmit="RegisterStaff">
-                    <div class="mb-3">
-                        <label class="form-label">Full Name</label>
-                        <input type="text" class="form-control" @bind-value="NewUser.FullName" placeholder="Full Name" required />
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Address</label>
-                        <input type="text" class="form-control" @bind-value="NewUser.Address" placeholder="Address" required />
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Email Address</label>
-                        <input type="email" class="form-control" @bind-value="NewUser.Email" placeholder="staff@imarat.org" required />
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Phone Number</label>
-                        <input type="text" class="form-control" @bind-value="NewUser.PhoneNumber" placeholder="Phone Number" required />
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Temporary Password</label>
-                        <input type="password" class="form-control" @bind-value="NewUser.Password" placeholder="••••••••" required />
-                    </div>
-                    <button type="submit" class="btn btn-success w-100 fw-bold">Create Account</button>
-                </EditForm>
-            </div>
-        </div>
-
-        <!-- Users List Table -->
-        <div class="col-md-4 mb-4">
-            <div class="card shadow-sm border-0 p-3">
-                <h5 class="fw-bold text-dark mb-3">System Active Users</h5>
-                <div class="list-group">
-                    @foreach (var user in UsersList)
-                    {
-                        <button type="button" 
-                                class="list-group-item list-group-item-action @(SelectedUser?.Id == user.Id ? "active bg-success border-success" : "")" 
-                                @onclick="() => LoadUserPermissions(user)">
-                            <i class="bi bi-person-fill"></i> @user.Email
-                        </button>
-                    }
+        <div class="col-lg-7 mb-4">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-header bg-white border-0 py-3 d-flex justify-content-between align-items-center">
+                    <h5 class="fw-bold text-dark m-0"><i class="bi bi-person-lines-fill me-2 text-secondary"></i>System Users Directory</h5>
+                    <span class="badge bg-light text-dark border fw-medium px-2 py-1">Total Accounts: @UsersList.Count</span>
+                </div>
+                <div class="table-responsive px-3">
+                    <table class="table table-hover align-middle border-top">
+                        <thead class="table-light text-secondary small text-uppercase">
+                            <tr>
+                                <th style="width: 45%;">User Context</th>
+                                <th style="width: 25%;">Status</th>
+                                <th style="width: 30%; text-align: right;">Action Matrix</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var user in UsersList)
+                            {
+                                <tr style="cursor: pointer;" class="@(SelectedUser?.Id == user.Id ? "table-success bg-opacity-25" : "")" @onclick="() => LoadUserContext(user)">
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <div class="avatar-circle me-2 bg-light text-secondary d-flex align-items-center justify-content-center fw-bold" style="width:36px; height:36px; border-radius:50%;">
+                                                @user.Email?[0].ToString().ToUpper()
+                                            </div>
+                                            <div class="d-flex flex-column">
+                                                <span class="fw-bold text-dark text-truncate small" style="max-width: 200px;">@user.FullName</span>
+                                                <span class="text-muted text-truncate" style="font-size: 0.8rem; max-width: 200px;">@user.Email</span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        @if (UserLockoutStates.ContainsKey(user.Id) && UserLockoutStates[user.Id])
+                                        {
+                                            <span class="badge bg-danger bg-opacity-10 text-danger border border-danger border-opacity-25 px-2 py-1"><i class="bi bi-lock-fill me-1"></i>Blocked</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 px-2 py-1"><i class="bi bi-check-circle-fill me-1"></i>Active</span>
+                                        }
+                                    </td>
+                                    <td style="text-align: right;" @onclick:stopPropagation="true">
+                                        <button class="btn btn-sm btn-light border me-1 fw-medium" title="Configure Core Settings" @onclick="() => LoadUserContext(user)">
+                                            <i class="bi bi-sliders text-primary"></i> Configure
+                                        </button>
+                                        <button class="btn btn-sm @(UserLockoutStates.ContainsKey(user.Id) && UserLockoutStates[user.Id] ? "btn-outline-success" : "btn-outline-danger") fw-medium"
+                                                @onclick="() => ToggleLockoutState(user)">
+                                            <i class="bi @(UserLockoutStates.ContainsKey(user.Id) && UserLockoutStates[user.Id] ? "bi-unlock-fill" : "bi-shield-slash-fill")"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
 
-        <!-- Dynamic Permissions Matrix Configuration -->
-        <div class="col-md-4 mb-4">
-            <div class="card shadow-sm border-0 p-4">
-                @if (SelectedUser != null)
-                {
-                    <h5 class="fw-bold text-dark mb-1">Manage Permissions</h5>
-                    <p class="text-muted small mb-3">Target Account: @SelectedUser.Email</p>
+        <div class="col-lg-5 mb-4">
+            @if (SelectedUser == null)
+            {
+                <div class="card shadow-sm border-0 p-4 sticky-top" style="top: 20px;">
+                    <h5 class="fw-bold text-success mb-3"><i class="bi bi-person-plus-fill me-2"></i>Onboard New Staff Account</h5>
+                    <EditForm Model="NewUser" OnValidSubmit="RegisterStaff">
+                        <DataAnnotationsValidator />
+                        <div class="mb-3">
+                            <label class="form-label small fw-semibold text-secondary">Full Employee Name</label>
+                            <input type="text" class="form-control" @bind-value="NewUser.FullName" placeholder="e.g., Mohammad Asif" required />
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label small fw-semibold text-secondary">Email Address</label>
+                                <input type="email" class="form-control" @bind-value="NewUser.Email" placeholder="name@imarat.org" required />
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label small fw-semibold text-secondary">Phone Number</label>
+                                <input type="text" class="form-control" @bind-value="NewUser.PhoneNumber" placeholder="Contact number" required />
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label small fw-semibold text-secondary">Office/Residential Address</label>
+                            <input type="text" class="form-control" @bind-value="NewUser.Address" placeholder="Complete address fields" required />
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label small fw-semibold text-secondary">Temporary Credentials Password</label>
+                            <input type="password" class="form-control" @bind-value="NewUser.Password" placeholder="••••••••" required />
+                        </div>
+                        <button type="submit" class="btn btn-success w-100 fw-bold py-2 mt-2">Initialize System Authorization</button>
+                    </EditForm>
+                </div>
+            }
+            else
+            {
+                <div class="card shadow-sm border-0 p-4 sticky-top" style="top: 20px; border-left: 4px solid #198754 !important;">
+                    <div class="d-flex justify-content-between align-items-start border-bottom pb-2 mb-3">
+                        <div>
+                            <h5 class="fw-bold text-dark m-0">Account Control Center</h5>
+                            <span class="text-success small fw-medium">@SelectedUser.Email</span>
+                        </div>
+                        <button type="button" class="btn-close" @onclick="ResetToRegistrationMode"></button>
+                    </div>
 
-                    <div class="border-top pt-3">
+                    <h6 class="fw-bold text-secondary mb-3 small text-uppercase tracking-wider"><i class="bi bi-grid-3x3-gap-fill me-1"></i>Modules Permissions Matrix</h6>
+                    <div class="bg-light p-3 rounded-3 mb-4 border" style="max-height: 220px; overflow-y: auto;">
                         @foreach (var perm in CurrentPermissions)
                         {
-                            <div class="form-check form-switch mb-3">
-                                <input class="form-check-input" type="checkbox" id="@perm.PermissionValue" @bind="perm.IsSelected" style="cursor:pointer;" />
-                                <label class="form-check-label fw-medium text-secondary" for="@perm.PermissionValue" style="cursor:pointer;">
+                            <div class="form-check form-switch mb-2 py-1 border-bottom border-white">
+                                <input class="form-check-input" type="checkbox" id="panel_@perm.PermissionValue" @bind="perm.IsSelected" style="cursor:pointer;" />
+                                <label class="form-check-label small fw-semibold text-dark" for="panel_@perm.PermissionValue" style="cursor:pointer;">
                                     @perm.DisplayName
                                 </label>
                             </div>
                         }
                     </div>
-
-                    <button type="button" class="btn btn-primary w-100 fw-bold mt-2" @onclick="SaveChanges">
-                        Save Permissions Matrix
+                    <button type="button" class="btn btn-sm btn-success w-100 fw-bold py-2 mb-4 shadow-sm" @onclick="SaveChanges">
+                        <i class="bi bi-save-fill me-1"></i> Apply Authorization Matrix Changes
                     </button>
-                }
-                else
-                {
-                    <div class="text-center text-muted p-5">
-                        <i class="bi bi-sliders2-vertical fs-1 d-block mb-2"></i>
-                        Select a user from the active list to alter access matrix controls.
+
+                    <h6 class="fw-bold text-danger mb-3 small text-uppercase tracking-wider border-top pt-3"><i class="bi bi-key-fill me-1"></i>Administrative Access Override</h6>
+                    <div class="row g-2">
+                        <div class="col-7">
+                            <input type="password" class="form-control form-control-sm" @bind="ForceNewPassword" placeholder="Enter new custom password" />
+                        </div>
+                        <div class="col-5">
+                            <button type="button" class="btn btn-sm btn-danger w-100 fw-bold" @onclick="ForcePasswordReset">
+                                <i class="bi bi-arrow-counterclockwise"></i> Force Reset
+                            </button>
+                        </div>
                     </div>
-                }
-            </div>
+                </div>
+            }
         </div>
     </div>
 </div>
-
 @code {
     private List<ApplicationUser> UsersList = new();
+    private Dictionary<string, bool> UserLockoutStates = new(); // Caching lockout state variables
     private RegisterUserModel NewUser = new();
     private ApplicationUser? SelectedUser;
     private List<PermissionSelection> CurrentPermissions = new();
+    private string ForceNewPassword = string.Empty;
 
     protected override async Task OnInitializedAsync()
     {
-        await LoadUsers();
+        await LoadDataRefresh();
     }
 
-    private async Task LoadUsers() => UsersList = await UserManagerService.GetAllUsersAsync();
+    private async Task LoadDataRefresh()
+    {
+        UsersList = await UserManagerService.GetAllUsersAsync();
+
+        // Refresh mapping dictionary for blocks state
+        UserLockoutStates.Clear();
+
+        foreach (var u in UsersList)
+        {
+            var isLocked = u.LockoutEnd.HasValue && u.LockoutEnd.Value > DateTimeOffset.UtcNow;
+            UserLockoutStates.Add(u.Id, isLocked);
+        }
+    }
+
+    private void ResetToRegistrationMode()
+    {
+        SelectedUser = null;
+        CurrentPermissions.Clear();
+        ForceNewPassword = string.Empty;
+    }
+
+    private async Task LoadUserContext(ApplicationUser user)
+    {
+        SelectedUser = user;
+        CurrentPermissions = await UserManagerService.GetUserPermissionsAsync(user.Id);
+    }
 
     private async Task RegisterStaff()
     {
         var result = await UserManagerService.CreateStaffUserAsync(NewUser);
         if (result.IsSuccess)
         {
-            await JS.InvokeVoidAsync("alert", "Staff Account generated successfully.");
+            await JS.InvokeVoidAsync("alert", "Account generated correctly.");
             NewUser = new();
-            await LoadUsers();
+            await LoadDataRefresh();
         }
         else
         {
-            await JS.InvokeVoidAsync("alert", $"Error: {result.Error}");
+            await JS.InvokeVoidAsync("alert", $"Failure: {result.Error}");
         }
-    }
-
-    private async Task LoadUserPermissions(ApplicationUser user)
-    {
-        SelectedUser = user;
-        CurrentPermissions = await UserManagerService.GetUserPermissionsAsync(user.Id);
     }
 
     private async Task SaveChanges()
     {
         if (SelectedUser == null) return;
         await UserManagerService.UpdateUserPermissionsAsync(SelectedUser.Id, CurrentPermissions);
-        await JS.InvokeVoidAsync("alert", "Access Control Matrix updated instantly.");
+        await JS.InvokeVoidAsync("alert", "Permissions updated live.");
+    }
+
+    private async Task ToggleLockoutState(ApplicationUser user)
+    {
+        bool currentState = UserLockoutStates.ContainsKey(user.Id) && UserLockoutStates[user.Id];
+        string promptMsg = currentState ? $"Kya aap {user.Email} ko UNBLOCK karna chahte hain?" : $"Warning: Kya aap {user.Email} ko BLOCK karna chahte hain? User login nahi kar payega.";
+
+        if (await JS.InvokeAsync<bool>("confirm", promptMsg))
+        {
+            await UserManagerService.ToggleUserLockoutAsync(user.Id);
+            await LoadDataRefresh();
+            if (SelectedUser?.Id == user.Id) ResetToRegistrationMode();
+            await JS.InvokeVoidAsync("alert", "Account access status flipped successfully.");
+        }
+    }
+
+    private async Task ForcePasswordReset()
+    {
+        if (SelectedUser == null || string.IsNullOrWhiteSpace(ForceNewPassword))
+        {
+            await JS.InvokeVoidAsync("alert", "Kripya naya complex password darj karein.");
+            return;
+        }
+
+        if (await JS.InvokeAsync<bool>("confirm", $"Kya aap such me {SelectedUser.Email} ka password admin level par override karna chahte hain?"))
+        {
+            var result = await UserManagerService.ForceResetPasswordAsync(SelectedUser.Id, ForceNewPassword);
+            if (result.IsSuccess)
+            {
+                await JS.InvokeVoidAsync("alert", "Password changed bypass active. Staff browser context killed.");
+                ForceNewPassword = string.Empty;
+            }
+            else
+            {
+                await JS.InvokeVoidAsync("alert", $"Reset Error: {result.Error}");
+            }
+        }
     }
 }
