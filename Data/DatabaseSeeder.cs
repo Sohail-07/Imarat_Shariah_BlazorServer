@@ -1,4 +1,5 @@
-﻿using Imarat_Shariah.Utilities;
+﻿using Imarat_Shariah.Data.Entities.Identity;
+using Imarat_Shariah.Utilities;
 using Microsoft.AspNetCore.Identity;
 using System.Security.Claims;
 
@@ -9,7 +10,7 @@ namespace Imarat_Shariah.Data
         public static async Task SeedAdminUserAsync(IServiceProvider serviceProvider)
         {
             var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-            var userManager = serviceProvider.GetRequiredService<UserManager<IdentityUser>>();
+            var userManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
 
             // 1. Create Admin Role if not exists
             if (!await roleManager.RoleExistsAsync(ApplicationPermissions.Roles.Admin))
@@ -23,7 +24,7 @@ namespace Imarat_Shariah.Data
 
             if (adminUser == null)
             {
-                adminUser = new IdentityUser
+                adminUser = new ApplicationUser
                 {
                     UserName = adminEmail,
                     Email = adminEmail,

@@ -1,4 +1,5 @@
 ﻿using Imarat_Shariah.Components.ViewModels.UserManagementModels;
+using Imarat_Shariah.Data.Entities.Identity;
 using Imarat_Shariah.Services.Interfaces;
 using Imarat_Shariah.Utilities;
 using Microsoft.AspNetCore.Identity;
@@ -8,19 +9,27 @@ namespace Imarat_Shariah.Services
 {
     public class InternalUserManager : IInternalUserManager
     {
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public InternalUserManager(UserManager<IdentityUser> userManager)
+        public InternalUserManager(UserManager<ApplicationUser> userManager)
         {
             _userManager = userManager;
         }
 
-        public async Task<List<IdentityUser>> GetAllUsersAsync() =>
+        public async Task<List<ApplicationUser>> GetAllUsersAsync() =>
             await _userManager.Users.ToListAsync();
 
         public async Task<(bool IsSuccess, string? Error)> CreateStaffUserAsync(RegisterUserModel model)
         {
-            var user = new IdentityUser { UserName = model.Email, Email = model.Email, EmailConfirmed = true };
+            var user = new ApplicationUser
+            {
+                UserName = model.Email,
+                Email = model.Email,
+                EmailConfirmed = true,
+                FullName = model.FullName,
+                Address = model.Address,
+                PhoneNumber = model.PhoneNumber
+            };
             var result = await _userManager.CreateAsync(user, model.Password);
 
             if (result.Succeeded)

@@ -1,4 +1,5 @@
 ﻿@page "/admin/users"
+@using Imarat_Shariah.Data.Entities.Identity
 @attribute [Authorize(Roles = ApplicationPermissions.Roles.Admin)]
 @inject IInternalUserManager UserManagerService
 @inject IJSRuntime JS
@@ -13,8 +14,20 @@
                 <h5 class="fw-bold text-success mb-3">Register New Staff</h5>
                 <EditForm Model="NewUser" OnValidSubmit="RegisterStaff">
                     <div class="mb-3">
+                        <label class="form-label">Full Name</label>
+                        <input type="text" class="form-control" @bind-value="NewUser.FullName" placeholder="Full Name" required />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Address</label>
+                        <input type="text" class="form-control" @bind-value="NewUser.Address" placeholder="Address" required />
+                    </div>
+                    <div class="mb-3">
                         <label class="form-label">Email Address</label>
                         <input type="email" class="form-control" @bind-value="NewUser.Email" placeholder="staff@imarat.org" required />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Phone Number</label>
+                        <input type="text" class="form-control" @bind-value="NewUser.PhoneNumber" placeholder="Phone Number" required />
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Temporary Password</label>
@@ -79,9 +92,9 @@
 </div>
 
 @code {
-    private List<IdentityUser> UsersList = new();
+    private List<ApplicationUser> UsersList = new();
     private RegisterUserModel NewUser = new();
-    private IdentityUser? SelectedUser;
+    private ApplicationUser? SelectedUser;
     private List<PermissionSelection> CurrentPermissions = new();
 
     protected override async Task OnInitializedAsync()
@@ -106,7 +119,7 @@
         }
     }
 
-    private async Task LoadUserPermissions(IdentityUser user)
+    private async Task LoadUserPermissions(ApplicationUser user)
     {
         SelectedUser = user;
         CurrentPermissions = await UserManagerService.GetUserPermissionsAsync(user.Id);

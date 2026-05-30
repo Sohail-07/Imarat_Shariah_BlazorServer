@@ -1,5 +1,6 @@
 using Imarat_Shariah.Components;
 using Imarat_Shariah.Data;
+using Imarat_Shariah.Data.Entities.Identity;
 using Imarat_Shariah.Data.Repositories;
 using Imarat_Shariah.Services;
 using Imarat_Shariah.Services.Interfaces;
@@ -25,7 +26,7 @@ builder.Logging.ClearProviders();
 builder.Logging.AddProvider(new DatabaseLoggerProvider(builder.Services.BuildServiceProvider()));
 
 // ASP.NET Core Identity Services
-builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 {
     options.Password.RequireDigit = false;
     options.Password.RequiredLength = 6;
@@ -106,7 +107,7 @@ await DatabaseSeeder.SeedAdminUserAsync(app.Services.CreateScope().ServiceProvid
 app.MapPost("/api/auth/login", async (
     [FromForm] string email,
     [FromForm] string password,
-    [FromServices] SignInManager<IdentityUser> signInManager) =>
+    [FromServices] SignInManager<ApplicationUser> signInManager) =>
 {
     var result = await signInManager.PasswordSignInAsync(email, password, isPersistent: true, lockoutOnFailure: false);
 
@@ -118,7 +119,7 @@ app.MapPost("/api/auth/login", async (
     return Results.Redirect("/login?error=Invalid Credentials");
 }).DisableAntiforgery();
 
-app.MapGet("/api/auth/logout", async ([FromServices] SignInManager<IdentityUser> signInManager) =>
+app.MapGet("/api/auth/logout", async ([FromServices] SignInManager<ApplicationUser> signInManager) =>
 {
     await signInManager.SignOutAsync();
     return Results.Redirect("/login");
